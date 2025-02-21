@@ -22,6 +22,9 @@ fun Application.configureDatabase() {
         maximumPoolSize = 10
         isAutoCommit = false
         transactionIsolation = "TRANSACTION_REPEATABLE_READ"
+        initializationFailTimeout = -1
+        connectionTimeout = 30000
+        validationTimeout = 5000
     }))
 
     transaction {
