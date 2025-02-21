@@ -2,10 +2,10 @@ package com.example.boundary
 
 import com.example.repository.ExposedUser
 import com.example.repository.UserRepository
+import io.github.oshai.kotlinlogging.KLogger
 import io.github.tabilzad.ktor.annotations.GenerateOpenApi
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application
-import io.ktor.server.application.log
 import io.ktor.server.request.receive
 import io.ktor.server.response.respond
 import io.ktor.server.routing.delete
@@ -19,15 +19,17 @@ import org.koin.ktor.ext.inject
 fun Application.userRoutes() {
 
     val userRepository by inject<UserRepository>()
+    val log by inject<KLogger>()
 
     routing {
         post("/users") {
             val user = call.receive<ExposedUser>()
+            log.debug { "Creating new user $user" }
 
             val id = try {
                 userRepository.createNewUser(user)
             } catch (e: Exception) {
-                log.error("Failed to create user", e)
+                log.error(e) { "Failed to create user" }
                 call.respond(HttpStatusCode.BadRequest)
                 return@post
             }
@@ -37,8 +39,11 @@ fun Application.userRoutes() {
 
         get("/users/{id}") {
             val id = call.parameters["id"]?.toInt()
+
+            log.debug { "Getting user with ID $id" }
+
             if (id == null) {
-                log.error("Invalid ID provided ${call.parameters["id"]}")
+                log.error { "Invalid ID provided ${call.parameters["id"]}" }
                 call.respond(HttpStatusCode.BadRequest)
                 return@get
             }
@@ -53,8 +58,11 @@ fun Application.userRoutes() {
 
         put("/users/{id}") {
             val id = call.parameters["id"]?.toInt()
+
+            log.debug { "Updating user with ID $id" }
+
             if (id == null) {
-                log.error("Invalid ID provided ${call.parameters["id"]}")
+                log.error { "Invalid ID provided ${call.parameters["id"]}" }
                 call.respond(HttpStatusCode.BadRequest)
                 return@put
             }
@@ -67,8 +75,11 @@ fun Application.userRoutes() {
 
         delete("/users/{id}") {
             val id = call.parameters["id"]?.toInt()
+
+            log.debug { "Deleting user with ID $id" }
+
             if (id == null) {
-                log.error("Invalid ID provided ${call.parameters["id"]}")
+                log.error { "Invalid ID provided ${call.parameters["id"]}" }
                 call.respond(HttpStatusCode.BadRequest)
                 return@delete
             }

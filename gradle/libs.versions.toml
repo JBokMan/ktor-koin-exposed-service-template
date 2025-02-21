@@ -6,6 +6,7 @@ ktor-version = "3.0.3"
 logback-version = "1.4.14"
 koin = "4.0.2"
 tabilzad-inspektor = "0.7.2-alpha"
+kotlin-logging-jvm = "7.0.3"
 
 [libraries]
 ktor-server-core = { module = "io.ktor:ktor-server-core", version.ref = "ktor-version" }
@@ -22,6 +23,7 @@ ktor-server-test-host = { module = "io.ktor:ktor-server-test-host", version.ref 
 kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin-version" }
 koin-ktor = { module = "io.insert-koin:koin-ktor", version.ref = "koin" }
 ktor-server-openapi = { module = "io.ktor:ktor-server-openapi", version.ref = "ktor-version" }
+kotlin-logging-jvm = { module = "io.github.oshai:kotlin-logging-jvm", version.ref = "kotlin-logging-jvm" }
 
 
 [plugins]

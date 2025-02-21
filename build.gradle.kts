@@ -53,6 +53,7 @@ dependencies {
   implementation(libs.koin.ktor)
   implementation(libs.ktor.server.config.yaml)
   implementation(libs.ktor.server.openapi)
+  implementation(libs.kotlin.logging.jvm)
   testImplementation(libs.ktor.server.test.host)
   testImplementation(libs.kotlin.test.junit)
 }
