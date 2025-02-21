@@ -13,6 +13,10 @@ class UserRepository() {
         return userService.read(id)
     }
 
+    suspend fun getAllUsers(): List<ExposedUser> {
+        return userService.readAll()
+    }
+
     suspend fun updateUser(id: Int, exposedUser: ExposedUser) {
         return userService.update(id, exposedUser)
     }

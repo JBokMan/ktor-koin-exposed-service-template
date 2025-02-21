@@ -39,6 +39,13 @@ class UserService() {
         }
     }
 
+    suspend fun readAll(): List<ExposedUser> {
+        return dbQuery {
+            Users.selectAll()
+                .map { ExposedUser(it[Users.name], it[Users.age]) }
+        }
+    }
+
     suspend fun update(id: Int, user: ExposedUser) {
         dbQuery {
             Users.update({ Users.id eq id }) {

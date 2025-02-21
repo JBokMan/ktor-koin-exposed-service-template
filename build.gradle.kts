@@ -16,23 +16,19 @@ swagger {
     hidePrivateAndInternalFields = true
     deriveFieldRequirementFromTypeNullability = true
     info {
-      title = "Ktor Server Title"
-      description = "Ktor Server Description"
+      title = "Service Name"
+      description = "Service Description"
       version = "1.0"
-      contact {
-        name = "Inspektor"
-        url = "https://github.com/tabilzad/ktor-docs-plugin"
-      }
     }
   }
 
   pluginOptions {
-    format = "yaml" // or json
+    format = "yaml"
   }
 }
 
 application {
-  mainClass.set("com.yourpackage.ApplicationKt")
+  mainClass.set("com.example.Application")
 
   val isDevelopment: Boolean = project.ext.has("development")
   applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")

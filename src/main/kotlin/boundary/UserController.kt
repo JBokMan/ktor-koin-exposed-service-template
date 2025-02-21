@@ -27,7 +27,16 @@ fun Application.userRoutes() {
     routing {
         @KtorResponds(
             mapping = [
-                ResponseEntry("200", Int::class)
+                ResponseEntry(
+                    status = "201",
+                    type = Int::class,
+                    description = "The User was created successfully, and the ID of the new user is returned"
+                ),
+                ResponseEntry(
+                    status = "400",
+                    type = Unit::class,
+                    description = "The request was malformed"
+                )
             ]
         )
         @KtorDescription(
@@ -51,8 +60,12 @@ fun Application.userRoutes() {
 
         @KtorResponds(
             mapping = [
-                ResponseEntry("200", ExposedUser::class),
-                ResponseEntry("404", Unit::class)
+                ResponseEntry(
+                    status = "200",
+                    type = ExposedUser::class,
+                    description = "The user was found and returned"
+                ),
+                ResponseEntry(status = "404", type = Unit::class, description = "The user was not found")
             ]
         )
         @KtorDescription(
@@ -80,8 +93,30 @@ fun Application.userRoutes() {
 
         @KtorResponds(
             mapping = [
-                ResponseEntry("200", Unit::class),
-                ResponseEntry("400", Unit::class)
+                ResponseEntry(
+                    status = "200",
+                    type = ExposedUser::class,
+                    description = "All users were found and returned",
+                    isCollection = true
+                ),
+            ]
+        )
+        @KtorDescription(
+            summary = "Get all users",
+            description = "Get all users in the system."
+        )
+        get("/users") {
+            log.debug { "Getting all users" }
+
+            val users = userRepository.getAllUsers()
+
+            call.respond(HttpStatusCode.OK, users)
+        }
+
+        @KtorResponds(
+            mapping = [
+                ResponseEntry(status = "200", type = Unit::class, description = "The user was updated successfully"),
+                ResponseEntry(status = "400", type = Unit::class, description = "The request was malformed")
             ]
         )
         @KtorDescription(
@@ -107,7 +142,8 @@ fun Application.userRoutes() {
 
         @KtorResponds(
             mapping = [
-                ResponseEntry("200", Unit::class),
+                ResponseEntry(status = "200", type = Unit::class, description = "The user was deleted successfully"),
+                ResponseEntry(status = "404", type = Unit::class, description = "The user was not found")
             ]
         )
         @KtorDescription(
@@ -121,7 +157,7 @@ fun Application.userRoutes() {
 
             if (id == null) {
                 log.error { "Invalid ID provided ${call.parameters["id"]}" }
-                call.respond(HttpStatusCode.BadRequest)
+                call.respond(HttpStatusCode.NotFound)
                 return@delete
             }
 
