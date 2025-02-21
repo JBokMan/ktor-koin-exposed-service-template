@@ -4,6 +4,9 @@ import com.example.repository.ExposedUser
 import com.example.repository.UserRepository
 import io.github.oshai.kotlinlogging.KLogger
 import io.github.tabilzad.ktor.annotations.GenerateOpenApi
+import io.github.tabilzad.ktor.annotations.KtorDescription
+import io.github.tabilzad.ktor.annotations.KtorResponds
+import io.github.tabilzad.ktor.annotations.ResponseEntry
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application
 import io.ktor.server.request.receive
@@ -22,6 +25,15 @@ fun Application.userRoutes() {
     val log by inject<KLogger>()
 
     routing {
+        @KtorResponds(
+            mapping = [
+                ResponseEntry("200", Int::class)
+            ]
+        )
+        @KtorDescription(
+            summary = "Create new user",
+            description = "Create a new user with the provided name and age"
+        )
         post("/users") {
             val user = call.receive<ExposedUser>()
             log.debug { "Creating new user $user" }
@@ -37,6 +49,16 @@ fun Application.userRoutes() {
             call.respond(HttpStatusCode.Created, id)
         }
 
+        @KtorResponds(
+            mapping = [
+                ResponseEntry("200", ExposedUser::class),
+                ResponseEntry("404", Unit::class)
+            ]
+        )
+        @KtorDescription(
+            summary = "Get user by ID",
+            description = "Get the user with the provided ID"
+        )
         get("/users/{id}") {
             val id = call.parameters["id"]?.toInt()
 
@@ -56,6 +78,16 @@ fun Application.userRoutes() {
             }
         }
 
+        @KtorResponds(
+            mapping = [
+                ResponseEntry("200", Unit::class),
+                ResponseEntry("400", Unit::class)
+            ]
+        )
+        @KtorDescription(
+            summary = "Update user by ID",
+            description = "Update the user with the provided ID"
+        )
         put("/users/{id}") {
             val id = call.parameters["id"]?.toInt()
 
@@ -73,6 +105,15 @@ fun Application.userRoutes() {
             call.respond(HttpStatusCode.OK)
         }
 
+        @KtorResponds(
+            mapping = [
+                ResponseEntry("200", Unit::class),
+            ]
+        )
+        @KtorDescription(
+            summary = "Delete user by ID",
+            description = "Delete the user with the provided ID"
+        )
         delete("/users/{id}") {
             val id = call.parameters["id"]?.toInt()
 
