@@ -49,7 +49,6 @@ dependencies {
   implementation(libs.exposed.jdbc)
   implementation(libs.h2)
   implementation(libs.ktor.server.netty)
-  implementation(libs.logback.classic)
   implementation(libs.koin.ktor)
   implementation(libs.ktor.server.config.yaml)
   implementation(libs.ktor.server.openapi)
