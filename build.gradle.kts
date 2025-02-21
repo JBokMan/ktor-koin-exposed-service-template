@@ -32,7 +32,7 @@ swagger {
 }
 
 application {
-  mainClass.set("io.ktor.server.netty.EngineMain")
+  mainClass.set("com.yourpackage.ApplicationKt")
 
   val isDevelopment: Boolean = project.ext.has("development")
   applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
@@ -48,7 +48,7 @@ dependencies {
   implementation(libs.exposed.core)
   implementation(libs.exposed.jdbc)
   implementation(libs.h2)
-  implementation(libs.ktor.server.netty)
+  implementation(libs.ktor.server.cio)
   implementation(libs.koin.ktor)
   implementation(libs.ktor.server.config.yaml)
   implementation(libs.ktor.server.openapi)
