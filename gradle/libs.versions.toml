@@ -38,3 +38,4 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 kotlin-plugin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin-version" }
 ktor = { id = "io.ktor.plugin", version.ref = "ktor-version" }
 tabilzad-inspektor = { id = "io.github.tabilzad.inspektor", version.ref = "tabilzad-inspektor" }
+
