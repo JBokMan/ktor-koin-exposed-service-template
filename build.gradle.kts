@@ -1,5 +1,6 @@
 plugins {
   alias(libs.plugins.kotlin.jvm)
+  alias(libs.plugins.ksp)
   alias(libs.plugins.ktor)
   alias(libs.plugins.kotlin.plugin.serialization)
   alias(libs.plugins.tabilzad.inspektor)
@@ -48,6 +49,8 @@ dependencies {
   implementation(libs.hikaricp)
   implementation(libs.ktor.server.cio)
   implementation(libs.koin.ktor)
+  implementation(libs.koin.annotations)
+  ksp(libs.koin.ksp.compiler)
   implementation(libs.ktor.server.config.yaml)
   implementation(libs.ktor.server.openapi)
   implementation(libs.kotlin.logging.jvm)

@@ -8,7 +8,9 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.koin.core.annotation.Single
 
+@Single
 class DatabaseConfiguration() {
     private val log = KotlinLogging.logger { this::class::simpleName }
 

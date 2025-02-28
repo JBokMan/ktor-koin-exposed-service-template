@@ -16,7 +16,9 @@ import io.ktor.server.routing.get
 import io.ktor.server.routing.post
 import io.ktor.server.routing.put
 import io.ktor.server.routing.routing
+import org.koin.core.annotation.Single
 
+@Single
 class UserController(private val userRepository: UserRepository) {
 
     private val log = KotlinLogging.logger { this::class::simpleName }

@@ -1,7 +1,9 @@
 package com.example.repository
 
+import org.koin.core.annotation.Single
 import org.koin.java.KoinJavaComponent.inject
 
+@Single
 class UserRepository() {
     val userService by inject<UserService>(UserService::class.java)
 
