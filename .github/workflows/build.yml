@@ -37,5 +37,5 @@ jobs:
           restore-keys: |
             gradle-${{ runner.os }}-
 
-      - name: Bundle 'release' with Gradle
-        run: ./gradlew bundleRelease --build-cache
+      - name: Clean Build with Gradle
+        run: ./gradlew clean build
