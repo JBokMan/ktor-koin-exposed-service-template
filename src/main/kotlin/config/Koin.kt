@@ -1,8 +1,9 @@
 package com.example.config
 
+import com.example.boundary.UserController
 import com.example.repository.UserRepository
 import com.example.repository.UserService
-import io.github.oshai.kotlinlogging.KotlinLogging
+import config.DatabaseConfiguration
 import io.ktor.server.application.Application
 import io.ktor.server.application.install
 import org.koin.dsl.module
@@ -12,9 +13,10 @@ fun Application.configureKoin() {
     install(Koin) {
         modules(
             module {
-                single { KotlinLogging.logger {} }
+                single { DatabaseConfiguration() }
                 single { UserRepository() }
                 single { UserService() }
+                single { UserController(get()) }
             }
         )
     }
