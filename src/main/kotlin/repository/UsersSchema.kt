@@ -10,10 +10,12 @@ import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import org.jetbrains.exposed.sql.update
+import org.koin.core.annotation.Single
 
 @Serializable
 data class ExposedUser(val name: String, val age: Int)
 
+@Single
 class UserService() {
     object Users : Table() {
         val id = integer("id").autoIncrement()
@@ -64,4 +66,3 @@ class UserService() {
     private suspend fun <T> dbQuery(block: suspend () -> T): T =
         newSuspendedTransaction(Dispatchers.IO) { block() }
 }
-
