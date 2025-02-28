@@ -37,8 +37,8 @@ jobs:
           restore-keys: |
             gradle-${{ runner.os }}-
 
-      - name: Clean Build with Gradle
-        run: ./gradlew clean build
+      - name: Clean Assemble with Gradle
+        run: ./gradlew clean assemble
 
       - name: Run Unit Tests
         run: ./gradlew test --build-cache

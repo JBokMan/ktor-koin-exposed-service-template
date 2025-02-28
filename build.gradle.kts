@@ -35,6 +35,10 @@ application {
   applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
 }
 
+ksp {
+  arg("KOIN_DEFAULT_MODULE", "true")
+}
+
 repositories { mavenCentral() }
 
 dependencies {
