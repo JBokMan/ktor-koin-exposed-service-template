@@ -1,14 +1,15 @@
-name: Build
+name: Build And Test
 
 on:
-  pull_request:
-    branches:
-      - main
+# Disabled until I figured out how to start docker-compse in the GitHub Actions
+#  pull_request:
+#    branches:
+#      - main
   workflow_dispatch:
 
 jobs:
-  build:
-    name: Build
+  build_and_test:
+    name: Build And Test
     runs-on: ubuntu-latest
 
     steps:
@@ -39,3 +40,6 @@ jobs:
 
       - name: Clean Assemble with Gradle
         run: ./gradlew clean assemble
+
+      - name: Run Unit Tests
+        run: ./gradlew test --build-cache

@@ -1,9 +1,10 @@
 name: Test
 
 on:
-  pull_request:
-    branches:
-      - main
+# Disabled to save on GitHub Action Minutes I use build_and_test now instead
+#  pull_request:
+#    branches:
+#      - main
   workflow_dispatch:
 
 jobs:
