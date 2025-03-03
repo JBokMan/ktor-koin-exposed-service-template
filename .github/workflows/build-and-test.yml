@@ -1,10 +1,9 @@
 name: Build And Test
 
 on:
-# Disabled until I figured out how to start docker-compse in the GitHub Actions
-#  pull_request:
-#    branches:
-#      - main
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
@@ -17,6 +16,9 @@ jobs:
         uses: actions/checkout@v4.2.2
         with:
           fetch-depth: 1
+
+      - name: Start Services
+        run: docker compose up -d --wait
 
       - name: Set up JDK 21
         uses: actions/setup-java@v4.7.0
@@ -38,8 +40,9 @@ jobs:
           restore-keys: |
             gradle-${{ runner.os }}-
 
-      - name: Clean Assemble with Gradle
-        run: ./gradlew clean assemble
+      - name: Build and Test with Gradle
+        run: ./gradlew build --no-daemon --parallel --build-cache --scan
 
-      - name: Run Unit Tests
-        run: ./gradlew test --build-cache
+      - name: Stop Services
+        if: always()
+        run: docker compose down
