@@ -1,0 +1,45 @@
+name: Update Dependency Badges
+
+on:
+  schedule:
+    - cron: '0 0 * * 0'  # Runs every Sunday at midnight UTC
+  workflow_dispatch:  # Allows manual trigger
+
+jobs:
+  update-badges:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.2.2
+        with:
+          fetch-depth: 1
+
+      - name: Extract Dependency Versions
+        id: extract_versions
+        run: |
+          KOTLIN_VERSION=$(grep 'kotlin-version = ' gradle/libs.versions.toml | cut -d'"' -f2)
+          KTOR_VERSION=$(grep 'ktor-version = ' gradle/libs.versions.toml | cut -d'"' -f2)
+          KOIN_VERSION=$(grep 'koin-version = ' gradle/libs.versions.toml | cut -d'"' -f2)
+          EXPOSED_VERSION=$(grep 'exposed-version = ' gradle/libs.versions.toml | cut -d'"' -f2)
+
+          echo "KOTLIN_VERSION=$KOTLIN_VERSION" >> $GITHUB_ENV
+          echo "KTOR_VERSION=$KTOR_VERSION" >> $GITHUB_ENV
+          echo "KOIN_VERSION=$KOIN_VERSION" >> $GITHUB_ENV
+          echo "EXPOSED_VERSION=$EXPOSED_VERSION" >> $GITHUB_ENV
+
+      - name: Update README Badges
+        run: |
+          sed -i "s|Kotlin-[0-9.]*-blue|Kotlin-$KOTLIN_VERSION-blue|g" README.md
+          sed -i "s|Ktor-[0-9.]*-blue|Ktor-$KTOR_VERSION-blue|g" README.md
+          sed -i "s|Koin-[0-9.]*-blue|Koin-$KOIN_VERSION-blue|g" README.md
+          sed -i "s|Exposed-[0-9.]*-blue|Exposed-$EXPOSED_VERSION-blue|g" README.md
+
+      - name: Change Ownership of all Files to Current User (helps with git push)
+        run: sudo chown -R "${USER:-$(id -un)}" .
+
+      - name: Commit Changes Made by Workflow
+        uses: stefanzweifel/git-auto-commit-action@v5.0.1
+        with:
+          commit_message: 🪪 update badges in README.md
+          commit_options: '--no-verify'
