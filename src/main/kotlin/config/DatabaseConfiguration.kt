@@ -7,6 +7,10 @@ import com.zaxxer.hikari.HikariDataSource
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
+import org.jetbrains.exposed.sql.Transaction
+import org.jetbrains.exposed.sql.addLogger
+import org.jetbrains.exposed.sql.statements.StatementContext
+import org.jetbrains.exposed.sql.statements.expandArgs
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.koin.core.annotation.Single
 
@@ -29,9 +33,23 @@ class DatabaseConfiguration() {
         }))
 
         transaction {
+            addLogger(KotlinLoggingSqlLogger)
             SchemaUtils.create(Users)
         }
 
         log.info { "Database initialized successfully" }
+    }
+}
+
+object KotlinLoggingSqlLogger : org.jetbrains.exposed.sql.SqlLogger {
+    private val kLogger = KotlinLogging.logger { this::class::simpleName }
+
+    override fun log(
+        context: StatementContext,
+        transaction: Transaction
+    ) {
+        kLogger.debug {
+            "SQL: ${context.expandArgs(transaction)}"
+        }
     }
 }
