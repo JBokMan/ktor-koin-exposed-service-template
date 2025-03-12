@@ -3,9 +3,9 @@
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.1.10-blue.svg)](https://kotlinlang.org)
 [![Ktor](https://img.shields.io/badge/Ktor-3.1.1-blue.svg)](https://ktor.io)
 [![Koin](https://img.shields.io/badge/Koin-4.0.2-blue.svg)](https://insert-koin.io)
-[![Exposed](https://img.shields.io/badge/Exposed-0.60.0-blue.svg)](https://www.jetbrains.com/exposed)
+[![Exposed](https://img.shields.io/badge/Exposed-0.60.0-blue.svg)](https://github.com/JetBrains/Exposed)
 
-This project is a Kotlin-based web service built using [Ktor](https://ktor.io), [Koin](https://insert-koin.io/), and [Exposed](https://github.com/JetBrains/Exposed). It provides a structured, dependency-injected, and database-integrated backend solution.
+This project is a Kotlin-based web service built using [Ktor](https://ktor.io), [Koin](https://insert-koin.io/), and [Exposed](https://www.jetbrains.com/exposed/). It provides a structured, dependency-injected, and database-integrated backend solution.
 
 ## Features
 
