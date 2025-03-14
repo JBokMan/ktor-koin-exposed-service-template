@@ -45,7 +45,7 @@ When the server starts successfully, you should see output similar to:
 
 Once the application is running locally, you can access the Swagger UI for API documentation at:
 
-[Swagger UI](http://localhost:8080/swagger)
+http://localhost:8080/swagger [Swagger UI](http://localhost:8080/swagger)
 
 ## Using Ktor
 
