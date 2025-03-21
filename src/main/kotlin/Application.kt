@@ -1,6 +1,7 @@
 package com.example
 
 import com.example.boundary.UserController
+import com.example.config.CohortConfiguration
 import com.example.config.configureKoin
 import com.example.config.configureSerialization
 import com.example.config.configureSwagger
@@ -21,6 +22,9 @@ fun Application.module() {
 
     val databaseConfiguration: DatabaseConfiguration by inject()
     databaseConfiguration.configureDatabase()
+
+    val cohortConfiguration: CohortConfiguration by inject()
+    cohortConfiguration.configureCohort(this)
 
     val userController by inject<UserController>()
     userController.registerUserRoutes(this)
