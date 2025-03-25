@@ -11,7 +11,6 @@ tabilzad-inspektor = "0.7.2-alpha"
 ksp = "2.1.10-1.0.31"
 cohort = "2.6.1"
 cohort-http = "2.4.1"
-ktor-okhttp = "3.1.1"
 
 
 [libraries]
@@ -37,7 +36,8 @@ cohort-ktor = { module = "com.sksamuel.cohort:cohort-ktor", version.ref = "cohor
 cohort-logback = { module = "com.sksamuel.cohort:cohort-logback", version.ref = "cohort" }
 cohort-hikari = { module = "com.sksamuel.cohort:cohort-hikari", version.ref = "cohort" }
 cohort-http = { module = "com.sksamuel.cohort:cohort-http", version.ref = "cohort-http" }
-ktor-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor-okhttp" }
+ktor-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor-version" }
+ktor-okhttp-jvm = { module = "io.ktor:ktor-client-okhttp-jvm", version.ref = "ktor-version" }
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin-version" }

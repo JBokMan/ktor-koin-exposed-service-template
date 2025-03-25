@@ -54,7 +54,6 @@ dependencies {
   implementation(libs.ktor.server.cio)
   implementation(libs.koin.ktor)
   implementation(libs.koin.annotations)
-  implementation("io.ktor:ktor-client-okhttp-jvm:3.1.1")
   ksp(libs.koin.ksp.compiler)
   implementation(libs.ktor.server.config.yaml)
   implementation(libs.ktor.server.openapi)
@@ -64,6 +63,7 @@ dependencies {
   implementation(libs.cohort.hikari)
   implementation(libs.cohort.http)
   implementation(libs.ktor.okhttp)
+  implementation(libs.ktor.okhttp.jvm)
   testImplementation(libs.ktor.server.test.host)
   testImplementation(libs.kotlin.test.junit)
 }
