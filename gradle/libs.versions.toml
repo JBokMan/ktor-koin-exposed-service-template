@@ -11,6 +11,7 @@ tabilzad-inspektor = "0.7.2-alpha"
 ksp = "2.1.10-1.0.31"
 cohort = "2.6.1"
 cohort-http = "2.4.1"
+ktfmt = "0.22.0"
 
 
 [libraries]
@@ -39,10 +40,12 @@ cohort-http = { module = "com.sksamuel.cohort:cohort-http", version.ref = "cohor
 ktor-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor-version" }
 ktor-okhttp-jvm = { module = "io.ktor:ktor-client-okhttp-jvm", version.ref = "ktor-version" }
 
+
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin-version" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 kotlin-plugin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin-version" }
 ktor = { id = "io.ktor.plugin", version.ref = "ktor-version" }
 tabilzad-inspektor = { id = "io.github.tabilzad.inspektor", version.ref = "tabilzad-inspektor" }
+ktfmt = { id = "com.ncorti.ktfmt.gradle", version.ref = "ktfmt" }
 

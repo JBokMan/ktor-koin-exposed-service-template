@@ -1,6 +1,5 @@
 package com.example.repository
 
-
 import kotlinx.coroutines.Dispatchers
 import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
@@ -13,8 +12,7 @@ import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransacti
 import org.jetbrains.exposed.sql.update
 import org.koin.core.annotation.Single
 
-@Serializable
-data class ExposedUser(val name: String, val age: Int)
+@Serializable data class ExposedUser(val name: String, val age: Int)
 
 @Single
 class UserService() {
@@ -44,8 +42,7 @@ class UserService() {
 
     suspend fun readAll(): List<ExposedUser> {
         return dbQuery {
-            Users.selectAll()
-                .map { ExposedUser(name = it[Users.name], age = it[Users.age]) }
+            Users.selectAll().map { ExposedUser(name = it[Users.name], age = it[Users.age]) }
         }
     }
 
@@ -59,15 +56,11 @@ class UserService() {
     }
 
     suspend fun delete(id: Int) {
-        dbQuery {
-            Users.deleteWhere { Users.id eq id }
-        }
+        dbQuery { Users.deleteWhere { Users.id eq id } }
     }
 
     suspend fun deleteWhereNameContains(substring: String) {
-        dbQuery {
-            Users.deleteWhere { name like "%$substring%" }
-        }
+        dbQuery { Users.deleteWhere { name like "%$substring%" } }
     }
 
     private suspend fun <T> dbQuery(block: suspend () -> T): T =

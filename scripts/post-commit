@@ -1,0 +1,48 @@
+#!/bin/bash -l
+
+echo "🪝 Starting post-commit hook..."
+
+echo "🔀 Checking if we are currently merging..."
+if git rev-parse -q --verify MERGE_HEAD >/dev/null 2>&1; then
+  echo "🔀 We are currently merging, so exit without running any checks"
+  exit 0
+fi
+
+echo "🔂 Checking if we are currently rebasing..."
+BRANCH_NAME=$(git branch | grep '\*' | sed 's/* //')
+echo "BRANCH_NAME: $BRANCH_NAME"
+if [[ "$BRANCH_NAME" == *"no branch, rebasing"* ]]; then
+  echo "🔂 We are currently rebasing, so exit without running any checks"
+  exit 0
+fi
+
+printf "Stashing uncommitted changes with message \"post_commit_stash\"...\n\n"
+git stash -q -m "post_commit_stash" --keep-index --include-untracked
+
+printf "🚀 Running KtfmtFormat...\n\n"
+./gradlew -Dorg.gradle.jvmargs=-Xmx4g ktfmtFormat
+
+FORMAT_RESULT=$?
+
+if ! git diff --quiet; then
+  echo "KtfmtFormat made changes"
+  printf "Amending changes to the current commit...\n\n"
+  git add .
+  git commit --amend --no-edit --no-verify
+fi
+
+printf "Applying the stash with message \"post_commit_stash\"...\n\n"
+eval "git stash apply stash^{/post_commit_stash} &> /dev/null"
+STASH_RESULT=$?
+if [ $STASH_RESULT -eq 0 ]; then
+  echo "Stash with message \"post_commit_stash\" exists"
+  printf "Dropping the stash with message \"post_commit_stash\"...\n\n"
+  git stash drop
+fi
+
+if [ $FORMAT_RESULT -ne 0 ]; then
+  printf "\n⛔️ Ktfmt Format failed. Please fix the code format issues."
+  exit 1
+fi
+
+exit 0

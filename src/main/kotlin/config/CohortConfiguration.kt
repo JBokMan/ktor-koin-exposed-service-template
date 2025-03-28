@@ -38,64 +38,107 @@ class CohortConfiguration() {
     @OptIn(ExperimentalTime::class)
     fun configureCohort(application: Application) {
 
-        val startUpChecks = HealthCheckRegistry(Dispatchers.Default) {
-            register(check = AvailableCoresHealthCheck.multiple, initialDelay = 30.seconds, checkInterval = 1.minutes)
-            register(
-                check = DatabaseConnectionHealthCheck(databaseConfiguration.dataSource),
-                initialDelay = 30.seconds,
-                checkInterval = 1.minutes
-            )
-            register(check = FreememHealthCheck.gb(1), initialDelay = 30.seconds, checkInterval = 1.minutes)
-            register(
-                check = HikariConnectionsHealthCheck(databaseConfiguration.dataSource, 1),
-                initialDelay = 30.seconds,
-                checkInterval = 5.seconds
-            )
-            val fileStore = Files.getFileStore(FileSystems.getDefault().getPath("/"))
-            register(
-                check = DiskSpaceHealthCheck(fileStore = fileStore),
-                initialDelay = 30.seconds,
-                checkInterval = 5.minutes
-            )
-        }
+        val startUpChecks =
+            HealthCheckRegistry(Dispatchers.Default) {
+                register(
+                    check = AvailableCoresHealthCheck.multiple,
+                    initialDelay = 30.seconds,
+                    checkInterval = 1.minutes,
+                )
+                register(
+                    check = DatabaseConnectionHealthCheck(databaseConfiguration.dataSource),
+                    initialDelay = 30.seconds,
+                    checkInterval = 1.minutes,
+                )
+                register(
+                    check = FreememHealthCheck.gb(1),
+                    initialDelay = 30.seconds,
+                    checkInterval = 1.minutes,
+                )
+                register(
+                    check = HikariConnectionsHealthCheck(databaseConfiguration.dataSource, 1),
+                    initialDelay = 30.seconds,
+                    checkInterval = 5.seconds,
+                )
+                val fileStore = Files.getFileStore(FileSystems.getDefault().getPath("/"))
+                register(
+                    check = DiskSpaceHealthCheck(fileStore = fileStore),
+                    initialDelay = 30.seconds,
+                    checkInterval = 5.minutes,
+                )
+            }
 
-        val readinessChecks = HealthCheckRegistry(Dispatchers.Default) {
-            register(check = GarbageCollectionTimeCheck(5), initialDelay = 30.seconds, checkInterval = 1.minutes)
-            register(check = ThreadDeadlockHealthCheck(), initialDelay = 30.seconds, checkInterval = 1.minutes)
-            register(check = SystemLoadHealthCheck(50.0), initialDelay = 30.seconds, checkInterval = 1.minutes)
-            register(check = SystemCpuHealthCheck(0.8), initialDelay = 30.seconds, checkInterval = 1.minutes)
+        val readinessChecks =
+            HealthCheckRegistry(Dispatchers.Default) {
+                register(
+                    check = GarbageCollectionTimeCheck(5),
+                    initialDelay = 30.seconds,
+                    checkInterval = 1.minutes,
+                )
+                register(
+                    check = ThreadDeadlockHealthCheck(),
+                    initialDelay = 30.seconds,
+                    checkInterval = 1.minutes,
+                )
+                register(
+                    check = SystemLoadHealthCheck(50.0),
+                    initialDelay = 30.seconds,
+                    checkInterval = 1.minutes,
+                )
+                register(
+                    check = SystemCpuHealthCheck(0.8),
+                    initialDelay = 30.seconds,
+                    checkInterval = 1.minutes,
+                )
 
-            // Ensures that an HTTP service is reachable
-            register(
-                check = EndpointHealthCheck(
-                    name = "get_user_endpoint",
+                // Ensures that an HTTP service is reachable
+                register(
+                    check =
+                        EndpointHealthCheck(
+                            name = "get_user_endpoint",
 
-                    // Function to perform the HTTP request
-                    fn = { client: HttpClient ->
-                        client.get("http://localhost:8080/users/1") // Using test user ID 1
-                    },
+                            // Function to perform the HTTP request
+                            fn = { client: HttpClient ->
+                                client.get("http://localhost:8080/users/1") // Using test user ID 1
+                            },
 
-                    // Function to evaluate the response
-                    eval = { response -> response.status == HttpStatusCode.OK }
-                ), initialDelay = 30.seconds, checkInterval = 1.minutes)
-        }
+                            // Function to evaluate the response
+                            eval = { response -> response.status == HttpStatusCode.OK },
+                        ),
+                    initialDelay = 30.seconds,
+                    checkInterval = 1.minutes,
+                )
+            }
 
-        val livenessChecks = HealthCheckRegistry(Dispatchers.Default) {
-            register(check = LiveThreadsHealthCheck(500), initialDelay = 30.seconds, checkInterval = 1.minutes)
-        }
+        val livenessChecks =
+            HealthCheckRegistry(Dispatchers.Default) {
+                register(
+                    check = LiveThreadsHealthCheck(500),
+                    initialDelay = 30.seconds,
+                    checkInterval = 1.minutes,
+                )
+            }
 
-        val healthChecks = HealthCheckRegistry(Dispatchers.Default) {
-            // These include checks that are useful for continuous health monitoring.
-            val fileStore = Files.getFileStore(FileSystems.getDefault().getPath("/"))
-            register(check = SystemCpuHealthCheck(0.8), initialDelay = 30.seconds, checkInterval = 1.minutes)
-            register(check = AvailableCoresHealthCheck.multiple, initialDelay = 30.seconds, checkInterval = 1.minutes)
-            register(
-                check = DiskSpaceHealthCheck(fileStore = fileStore),
-                initialDelay = 30.seconds,
-                checkInterval = 5.minutes
-            )
-        }
-
+        val healthChecks =
+            HealthCheckRegistry(Dispatchers.Default) {
+                // These include checks that are useful for continuous health monitoring.
+                val fileStore = Files.getFileStore(FileSystems.getDefault().getPath("/"))
+                register(
+                    check = SystemCpuHealthCheck(0.8),
+                    initialDelay = 30.seconds,
+                    checkInterval = 1.minutes,
+                )
+                register(
+                    check = AvailableCoresHealthCheck.multiple,
+                    initialDelay = 30.seconds,
+                    checkInterval = 1.minutes,
+                )
+                register(
+                    check = DiskSpaceHealthCheck(fileStore = fileStore),
+                    initialDelay = 30.seconds,
+                    checkInterval = 5.minutes,
+                )
+            }
 
         application.install(Cohort) {
 
@@ -105,7 +148,8 @@ class CohortConfiguration() {
             // enable runtime JVM information such as vm options and vendor name
             jvmInfo = true
 
-            // configure the Logback log manager to show effective log levels and allow runtime adjustment
+            // configure the Logback log manager to show effective log levels and allow runtime
+            // adjustment
             logManager = LogbackManager
 
             // show connection pool information

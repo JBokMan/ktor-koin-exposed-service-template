@@ -6,10 +6,5 @@ import org.koin.ksp.generated.defaultModule
 import org.koin.ktor.plugin.Koin
 
 fun Application.configureKoin() {
-    install(Koin) {
-        modules(
-            defaultModule,
-            networkModule
-        )
-    }
+    install(Koin) { modules(defaultModule, networkModule) }
 }

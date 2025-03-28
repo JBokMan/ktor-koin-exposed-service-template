@@ -1,6 +1,5 @@
 package config
 
-
 import com.example.repository.UserService.Users
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
@@ -18,18 +17,21 @@ import org.koin.core.annotation.Single
 class DatabaseConfiguration() {
     private val log = KotlinLogging.logger { this::class::simpleName }
 
-    val dataSource = HikariDataSource(HikariConfig().apply {
-        jdbcUrl = "jdbc:postgresql://localhost:5432/mydatabase"
-        driverClassName = "org.postgresql.Driver"
-        username = "myuser"
-        password = "mypassword"
-        maximumPoolSize = 10
-        isAutoCommit = false
-        transactionIsolation = "TRANSACTION_REPEATABLE_READ"
-        initializationFailTimeout = -1
-        connectionTimeout = 30000
-        validationTimeout = 5000
-    })
+    val dataSource =
+        HikariDataSource(
+            HikariConfig().apply {
+                jdbcUrl = "jdbc:postgresql://localhost:5432/mydatabase"
+                driverClassName = "org.postgresql.Driver"
+                username = "myuser"
+                password = "mypassword"
+                maximumPoolSize = 10
+                isAutoCommit = false
+                transactionIsolation = "TRANSACTION_REPEATABLE_READ"
+                initializationFailTimeout = -1
+                connectionTimeout = 30000
+                validationTimeout = 5000
+            }
+        )
 
     fun configureDatabase() {
         Database.connect(dataSource)
@@ -45,13 +47,8 @@ class DatabaseConfiguration() {
     object KotlinLoggingSqlLogger : org.jetbrains.exposed.sql.SqlLogger {
         private val kLogger = KotlinLogging.logger { this::class::simpleName }
 
-        override fun log(
-            context: StatementContext,
-            transaction: Transaction
-        ) {
-            kLogger.debug {
-                "SQL: ${context.expandArgs(transaction)}"
-            }
+        override fun log(context: StatementContext, transaction: Transaction) {
+            kLogger.debug { "SQL: ${context.expandArgs(transaction)}" }
         }
     }
 }
