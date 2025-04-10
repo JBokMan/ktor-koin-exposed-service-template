@@ -9,7 +9,7 @@ hikaricp = "6.3.0"
 kotlin-logging-jvm = "7.0.5"
 tabilzad-inspektor = "0.7.2-alpha"
 ksp = "2.1.10-1.0.31"
-cohort = "2.6.1"
+cohort = "2.6.2"
 cohort-http = "2.4.1"
 ktfmt = "0.22.0"
 
