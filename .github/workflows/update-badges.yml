@@ -41,7 +41,7 @@ jobs:
         run: sudo chown -R "${USER:-$(id -un)}" .
 
       - name: Commit Changes Made by Workflow
-        uses: stefanzweifel/git-auto-commit-action@v5.1.0
+        uses: stefanzweifel/git-auto-commit-action@v5.2.0
         with:
           commit_message: 🪪 update badges in README.md
           commit_options: '--no-verify'
