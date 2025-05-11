@@ -1,7 +1,7 @@
 # Ktor Koin Exposed Service Template
 
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.1.10-blue.svg)](https://github.com/JetBrains/kotlin)
-[![Ktor](https://img.shields.io/badge/Ktor-3.1.2-blue.svg)](https://github.com/ktorio/ktor)
+[![Ktor](https://img.shields.io/badge/Ktor-3.1.3-blue.svg)](https://github.com/ktorio/ktor)
 [![Koin](https://img.shields.io/badge/Koin-4.0.4-blue.svg)](https://github.com/InsertKoinIO/koin)
 [![Exposed](https://img.shields.io/badge/Exposed-0.61.0-blue.svg)](https://github.com/JetBrains/Exposed)
 
