@@ -1,11 +1,13 @@
 package com.example
 
+import com.example.boundary.KafkaController
 import com.example.boundary.UserController
 import com.example.config.CohortConfiguration
 import com.example.config.KafkaConfiguration
 import com.example.config.configureKoin
 import com.example.config.configureSerialization
 import com.example.config.configureSwagger
+import com.example.service.KafkaService
 import config.DatabaseConfiguration
 import io.ktor.server.application.Application
 import io.ktor.server.cio.CIO
@@ -35,4 +37,11 @@ fun Application.module() {
 
     val userController by inject<UserController>()
     userController.registerUserRoutes(this)
+
+    val kafkaController by inject<KafkaController>()
+    kafkaController.registerKafkaRoutes(this)
+
+    // Inject KafkaService to close it when the application is shutting down
+    val kafkaService by inject<KafkaService>()
+    Runtime.getRuntime().addShutdownHook(Thread { kafkaService.close() })
 }

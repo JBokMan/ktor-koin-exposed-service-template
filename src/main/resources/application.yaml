@@ -10,4 +10,5 @@ kafka:
     bootstrapServers: "localhost:9092"
     groupId: "ktor-kafka-group"
     autoOffsetReset: "earliest"
+    acksConfig: "all"
 
