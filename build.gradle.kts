@@ -63,6 +63,8 @@ dependencies {
     implementation(libs.cohort.http)
     implementation(libs.ktor.okhttp)
     implementation(libs.ktor.okhttp.jvm)
+    implementation(libs.kafka.clients)
+    implementation(libs.reactor.kafka)
     testImplementation(libs.ktor.server.test.host)
     testImplementation(libs.kotlin.test.junit)
 }

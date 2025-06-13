@@ -12,6 +12,9 @@ ksp = "2.1.21-2.0.2"
 cohort = "2.7.2"
 cohort-http = "2.4.1"
 ktfmt = "0.22.0"
+kafka = "3.7.1"
+reactor-kafka = "1.3.18"
+
 
 
 [libraries]
@@ -39,6 +42,9 @@ cohort-hikari = { module = "com.sksamuel.cohort:cohort-hikari", version.ref = "c
 cohort-http = { module = "com.sksamuel.cohort:cohort-http", version.ref = "cohort-http" }
 ktor-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor-version" }
 ktor-okhttp-jvm = { module = "io.ktor:ktor-client-okhttp-jvm", version.ref = "ktor-version" }
+kafka-clients = { module = "org.apache.kafka:kafka-clients", version.ref = "kafka" }
+reactor-kafka = { module = "io.projectreactor.kafka:reactor-kafka", version.ref = "reactor-kafka" }
+
 
 
 [plugins]
