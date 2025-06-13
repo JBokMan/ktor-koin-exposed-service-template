@@ -13,7 +13,7 @@ cohort = "2.7.2"
 cohort-http = "2.4.1"
 ktfmt = "0.22.0"
 kafka = "3.7.1"
-reactor-kafka = "1.3.18"
+reactor-kafka = "1.3.23"
 
 
 
