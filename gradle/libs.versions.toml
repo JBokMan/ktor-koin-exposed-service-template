@@ -2,7 +2,7 @@
 kotlin-version = "2.1.21"
 ktor-version = "3.2.0"
 koin-version = "4.1.0"
-koin-annotations-version = "2.0.0"
+koin-annotations-version = "2.1.0"
 exposed-version = "0.61.0"
 postgresql = "42.7.7"
 hikaricp = "6.3.0"
