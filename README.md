@@ -1,8 +1,8 @@
 # Ktor Koin Exposed Service Template
 
-[![Kotlin](https://img.shields.io/badge/Kotlin-2.1.10-blue.svg)](https://github.com/JetBrains/kotlin)
-[![Ktor](https://img.shields.io/badge/Ktor-3.1.3-blue.svg)](https://github.com/ktorio/ktor)
-[![Koin](https://img.shields.io/badge/Koin-4.0.4-blue.svg)](https://github.com/InsertKoinIO/koin)
+[![Kotlin](https://img.shields.io/badge/Kotlin-2.1.21-blue.svg)](https://github.com/JetBrains/kotlin)
+[![Ktor](https://img.shields.io/badge/Ktor-3.2.0-blue.svg)](https://github.com/ktorio/ktor)
+[![Koin](https://img.shields.io/badge/Koin-4.1.0-blue.svg)](https://github.com/InsertKoinIO/koin)
 [![Exposed](https://img.shields.io/badge/Exposed-0.61.0-blue.svg)](https://github.com/JetBrains/Exposed)
 
 This project is a Kotlin-based web service built using [Ktor](https://ktor.io), [Koin](https://insert-koin.io/), and [Exposed](https://www.jetbrains.com/exposed/). It provides a structured, dependency-injected, and database-integrated backend solution.
