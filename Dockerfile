@@ -11,7 +11,7 @@ RUN rm -rf /home/gradle/.gradle/caches/
 RUN gradle build --no-daemon
 
 # Runtime stage: Use JRE for a smaller image
-FROM eclipse-temurin:21-jre
+FROM eclipse-temurin:21.0.7_6-jre
 
 WORKDIR /app
 # Copy only the built JAR and configuration from the build stage
