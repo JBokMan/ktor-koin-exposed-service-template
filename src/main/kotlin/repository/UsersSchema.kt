@@ -12,7 +12,7 @@ import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransacti
 import org.jetbrains.exposed.sql.update
 import org.koin.core.annotation.Single
 
-@Serializable data class ExposedUser(val name: String, val age: Int)
+@Serializable data class ExposedUser(val id: Int, val name: String, val age: Int)
 
 @Single
 class UserService() {
@@ -35,14 +35,16 @@ class UserService() {
         return dbQuery {
             Users.selectAll()
                 .where { Users.id eq id }
-                .map { ExposedUser(name = it[Users.name], age = it[Users.age]) }
+                .map { ExposedUser(id = it[Users.id], name = it[Users.name], age = it[Users.age]) }
                 .singleOrNull()
         }
     }
 
     suspend fun readAll(): List<ExposedUser> {
         return dbQuery {
-            Users.selectAll().map { ExposedUser(name = it[Users.name], age = it[Users.age]) }
+            Users.selectAll().map {
+                ExposedUser(id = it[Users.id], name = it[Users.name], age = it[Users.age])
+            }
         }
     }
 

@@ -67,7 +67,10 @@ dependencies {
     implementation(libs.reactor.kafka)
     testImplementation(libs.ktor.server.test.host)
     testImplementation(libs.kotlin.test.junit)
+    testImplementation(libs.testcontainers.junit.jupiter)
 }
+
+tasks.withType<Test> { useJUnitPlatform() }
 
 val installLocalPostCommitGitHook =
     tasks.register<Copy>("installLocalPreCommitGitHook") {
