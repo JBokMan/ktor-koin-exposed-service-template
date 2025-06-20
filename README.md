@@ -188,6 +188,19 @@ To run tests locally, you need a PostgreSQL database. You can start a local inst
 docker-compose up -d
 ```
 
+```sh
+docker build -t my-ktor-app .
+```
+
+```sh
+docker run --rm -it \
+  --network=host \
+  -e POSTGRES_HOST=localhost \
+  -e KAFKA_BOOTSTRAP_SERVERS=localhost:9092 \
+  -e POSTGRES_PASSWORD=mypassword \
+  my-ktor-app
+```
+
 This will spin up a PostgreSQL container in the background. Make sure your application is configured to connect to this instance.
 
 ## Using SDKMAN for Environment Management

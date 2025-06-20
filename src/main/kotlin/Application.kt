@@ -16,7 +16,8 @@ import io.ktor.server.engine.embeddedServer
 import org.koin.ktor.ext.inject
 
 fun main() {
-    embeddedServer(CIO, port = 8080, module = Application::module).start(wait = true)
+    val port = System.getenv("PORT")?.toIntOrNull() ?: 8080
+    embeddedServer(CIO, port = port, module = Application::module).start(wait = true)
 }
 
 fun Application.module() {

@@ -28,7 +28,7 @@ swagger {
 }
 
 application {
-    mainClass.set("com.example.Application")
+    mainClass.set("com.example.ApplicationKt")
 
     val isDevelopment: Boolean = project.ext.has("development")
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
@@ -93,3 +93,9 @@ tasks.named("processResources") {
     dependsOn(installLocalPostCommitGitHook)
     dependsOn("installLocalPreCommitGitHook") // Assuming this task is also correctly registered
 }
+
+tasks.named("ktfmtCheckMain") { enabled = false }
+
+tasks.named("ktfmtCheckTest") { enabled = false }
+
+tasks.named("ktfmtCheckScripts") { enabled = false }

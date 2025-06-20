@@ -20,10 +20,16 @@ class DatabaseConfiguration() {
     val dataSource =
         HikariDataSource(
             HikariConfig().apply {
-                jdbcUrl = "jdbc:postgresql://localhost:5432/mydatabase"
+                val dbHost = System.getenv("POSTGRES_HOST") ?: "localhost"
+                val dbPort = System.getenv("POSTGRES_PORT") ?: "5432"
+                val dbName = System.getenv("POSTGRES_DB") ?: "mydatabase"
+                val dbUser = System.getenv("POSTGRES_USER") ?: "myuser"
+                val dbPassword = System.getenv("POSTGRES_PASSWORD") ?: "mypassword"
+
+                jdbcUrl = "jdbc:postgresql://$dbHost:$dbPort/$dbName"
                 driverClassName = "org.postgresql.Driver"
-                username = "myuser"
-                password = "mypassword"
+                username = dbUser
+                password = dbPassword
                 maximumPoolSize = 10
                 isAutoCommit = false
                 transactionIsolation = "TRANSACTION_REPEATABLE_READ"
