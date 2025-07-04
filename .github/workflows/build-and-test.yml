@@ -30,7 +30,7 @@ jobs:
         image: confluentinc/cp-kafka:latest
         ports:
           - 9092:9092
-        environment:
+        env:
           KAFKA_NODE_ID: 1
           KAFKA_PROCESS_ROLES: controller,broker
           KAFKA_CONTROLLER_QUORUM_VOTERS: 1@localhost:9093
