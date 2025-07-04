@@ -69,6 +69,10 @@ jobs:
       - name: Build and Test with Gradle
         run: ./gradlew build --no-daemon --parallel --build-cache --scan
 
+      - name: Show Docker Compose logs on failure
+        if: failure()
+        run: docker compose logs
+
       - name: Stop Services
         if: always()
         run: docker compose down
