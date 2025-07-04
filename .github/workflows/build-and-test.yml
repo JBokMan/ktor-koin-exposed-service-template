@@ -11,56 +11,33 @@ jobs:
     name: Build And Test
     runs-on: ubuntu-latest
 
-    services:
-      postgres:
-        image: postgres:latest
-        env:
-          POSTGRES_DB: mydatabase
-          POSTGRES_USER: myuser
-          POSTGRES_PASSWORD: mypassword
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd "pg_isready -U myuser -d mydatabase"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
-      kafka:
-        image: confluentinc/cp-kafka:latest
-        ports:
-          - 9092:9092
-        env:
-          KAFKA_NODE_ID: 1
-          KAFKA_PROCESS_ROLES: controller,broker
-          KAFKA_CONTROLLER_QUORUM_VOTERS: 1@localhost:9093
-          KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
-          KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
-          KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
-          KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-          KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
-          CLUSTER_ID: '012345678910abcdefgh'
-
     steps:
       - name: Checkout
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v4
 
       - name: Set up JDK 21
-        uses: actions/setup-java@v4.7.1
+        uses: actions/setup-java@v4
         with:
           java-version: '21'
           distribution: 'temurin'
           cache: gradle
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4.4.1
+        uses: gradle/actions/setup-gradle@v4
 
+      # This is the crucial step. We do NOT start services here.
+      # Your tests, using Testcontainers, will read the docker-compose.yml file
+      # and start the services automatically. Your application code will then connect
+      # to 'localhost' on the ports mapped in the compose file.
       - name: Build and Test with Gradle
-        env:
-          POSTGRES_HOST: localhost
-          POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }} # Use the dynamically assigned port
-          POSTGRES_DB: mydatabase
-          POSTGRES_USER: myuser
-          POSTGRES_PASSWORD: mypassword
-          KAFKA_BOOTSTRAP_SERVERS: localhost:9092
         run: ./gradlew build --no-daemon
+
+      # If tests fail, it's useful to see the state of docker containers
+      # that Testcontainers may have left running.
+      - name: Show Docker status on failure
+        if: failure()
+        run: |
+          echo "--- Docker PS ---"
+          docker ps -a
+          echo "--- Docker Compose Logs ---"
+          docker compose logs
