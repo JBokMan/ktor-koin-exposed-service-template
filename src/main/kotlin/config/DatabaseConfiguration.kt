@@ -33,9 +33,9 @@ class DatabaseConfiguration() {
                 maximumPoolSize = 10
                 isAutoCommit = false
                 transactionIsolation = "TRANSACTION_REPEATABLE_READ"
-                initializationFailTimeout = -1
-                connectionTimeout = 30000
-                validationTimeout = 5000
+                connectionTimeout = 5000
+                validationTimeout = 3000
+                initializationFailTimeout = 60000 // Fail after 1 minute
             }
         )
 

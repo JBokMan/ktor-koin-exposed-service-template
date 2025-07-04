@@ -10,38 +10,40 @@ jobs:
   build_and_test:
     name: Build And Test
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
+
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_DB: mydatabase
+          POSTGRES_USER: myuser
+          POSTGRES_PASSWORD: mypassword
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U myuser -d mydatabase"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      kafka:
+        image: confluentinc/cp-kafka:latest
+        ports:
+          - 9092:9092
+        environment:
+          KAFKA_NODE_ID: 1
+          KAFKA_PROCESS_ROLES: controller,broker
+          KAFKA_CONTROLLER_QUORUM_VOTERS: 1@localhost:9093
+          KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
+          KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+          KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+          KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+          KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+          CLUSTER_ID: '012345678910abcdefgh'
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4.2.2
-        with:
-          fetch-depth: 1
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3.11.1
-
-      - name: Add runner to docker group
-        run: sudo usermod -aG docker $USER
-
-      - name: Start Docker
-        run: sudo systemctl start docker
-
-      - name: Install docker-compose (if needed)
-        run: |
-          sudo curl -L "https://github.com/docker/compose/releases/download/v2.27.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-          sudo chmod +x /usr/local/bin/docker-compose
-
-      - name: Set TESTCONTAINERS_DOCKER_COMPOSE_COMMAND
-        run: echo "TESTCONTAINERS_DOCKER_COMPOSE_COMMAND=docker compose" >> $GITHUB_ENV
-
-      - name: Start Services
-        run: docker compose up -d --wait
 
       - name: Set up JDK 21
         uses: actions/setup-java@v4.7.1
@@ -53,26 +55,12 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4.4.1
 
-      - name: Restore Gradle Build Cache
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            gradle-${{ runner.os }}-
-
-      - name: Ensure Docker Compose is installed
-        run: docker compose version || docker-compose version
-
       - name: Build and Test with Gradle
-        run: ./gradlew build --no-daemon --parallel --build-cache --scan
-
-      - name: Show Docker Compose logs on failure
-        if: failure()
-        run: docker compose logs
-
-      - name: Stop Services
-        if: always()
-        run: docker compose down
+        env:
+          POSTGRES_HOST: localhost
+          POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }} # Use the dynamically assigned port
+          POSTGRES_DB: mydatabase
+          POSTGRES_USER: myuser
+          POSTGRES_PASSWORD: mypassword
+          KAFKA_BOOTSTRAP_SERVERS: localhost:9092
+        run: ./gradlew build --no-daemon
