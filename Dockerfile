@@ -1,5 +1,5 @@
 # Build stage: Use Gradle to build the application
-FROM gradle:8.14.2-jdk21 AS build
+FROM gradle:8.14.3-jdk21 AS build
 
 WORKDIR /app
 COPY . .
