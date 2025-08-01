@@ -18,6 +18,7 @@ testcontainers = "1.21.3"
 retrofit = "2.9.0"
 okio = "3.7.0"
 retrofit-kotlinx-serialization = "1.0.0"
+koog = "0.3.0"
 
 
 [libraries]
@@ -51,6 +52,7 @@ testcontainers-junit-jupiter = { module = "org.testcontainers:junit-jupiter", ve
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 okio = { module = "com.squareup.okio:okio", version.ref = "okio" }
 retrofit-kotlinx-serialization = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version.ref = "retrofit-kotlinx-serialization" }
+koog = { module = "ai.koog:koog-agents", version.ref = "koog" }
 
 
 
