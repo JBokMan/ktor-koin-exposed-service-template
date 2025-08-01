@@ -1,21 +1,17 @@
 package com.example.config
 
-import com.example.api.StarWarsApi
+import com.example.api.PokemonApi
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import java.security.SecureRandom
-import java.security.cert.X509Certificate
-import javax.net.ssl.SSLContext
-import javax.net.ssl.TrustManager
-import javax.net.ssl.X509TrustManager
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import org.koin.core.annotation.Single
 import org.koin.dsl.module
+import retrofit2.Converter
 import retrofit2.Retrofit
 
 val retrofitModule = module {
-    single {
+    single<Json> {
         Json {
             ignoreUnknownKeys = true
             coerceInputValues = true
@@ -23,61 +19,43 @@ val retrofitModule = module {
         }
     }
 
-    single {
+    single<Converter.Factory> {
+        val json = get<Json>()
+
         val contentType = "application/json".toMediaType()
-        get<Json>().asConverterFactory(contentType)
+        json.asConverterFactory(contentType)
     }
 
-    single {
-        // Create a trust manager that does not validate certificate chains
-        val trustAllCerts =
-            arrayOf<TrustManager>(
-                object : X509TrustManager {
-                    override fun checkClientTrusted(
-                        chain: Array<out X509Certificate>?,
-                        authType: String?,
-                    ) {}
-
-                    override fun checkServerTrusted(
-                        chain: Array<out X509Certificate>?,
-                        authType: String?,
-                    ) {}
-
-                    override fun getAcceptedIssuers(): Array<X509Certificate> = arrayOf()
-                }
-            )
-
-        // Install the all-trusting trust manager
-        val sslContext = SSLContext.getInstance("SSL")
-        sslContext.init(null, trustAllCerts, SecureRandom())
-
-        // Create an OkHttpClient that trusts all certificates
+    single<OkHttpClient> {
         OkHttpClient.Builder()
-            .sslSocketFactory(sslContext.socketFactory, trustAllCerts[0] as X509TrustManager)
-            .hostnameVerifier { _, _ -> true }
             .connectTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
             .readTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
             .build()
     }
 
-    single {
+    single<Retrofit> {
+        val okHttpClient = get<OkHttpClient>()
+        val converterFactory = get<Converter.Factory>()
+
         Retrofit.Builder()
-            .baseUrl("https://swapi.dev/api/")
-            .client(get())
-            .addConverterFactory(get<retrofit2.Converter.Factory>())
+            .baseUrl("https://pokeapi.co/api/v2/")
+            .client(okHttpClient)
+            .addConverterFactory(converterFactory)
             .build()
     }
 
-    single { get<Retrofit>().create(StarWarsApi::class.java) }
+    single<PokemonApi> {
+        val retrofit = get<Retrofit>()
+
+        retrofit.create(PokemonApi::class.java)
+    }
 }
 
 @Single
-class StarWarsClient(private val api: StarWarsApi) {
-    fun getPeople(page: Int? = null) = api.getPeople(page)
+class PokemonClient(private val api: PokemonApi) {
+    fun getPokemonList(offset: Int? = null, limit: Int? = null) = api.getPokemonList(offset, limit)
 
-    fun getPerson(id: Int) = api.getPerson(id)
+    fun getPokemon(idOrName: String) = api.getPokemon(idOrName)
 
-    fun getPlanets(page: Int? = null) = api.getPlanets(page)
-
-    fun getPlanet(id: Int) = api.getPlanet(id)
+    fun getPokemonSpecies(idOrName: String) = api.getPokemonSpecies(idOrName)
 }

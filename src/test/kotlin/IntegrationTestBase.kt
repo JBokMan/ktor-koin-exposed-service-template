@@ -62,6 +62,8 @@ abstract class IntegrationTestBase {
         if (::composeContainer.isInitialized) {
             composeContainer.stop()
         }
+
+        // stopKoin()
     }
 
     fun withTestApp(block: suspend ApplicationTestBuilder.() -> Unit) = testApplication {

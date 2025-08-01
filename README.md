@@ -213,6 +213,118 @@ sdk env
 
 Ensure you have SDKMAN installed before using this command.
 
+## HTTP Client with OkHttp and Retrofit
+
+This project uses two HTTP client implementations for different purposes:
+
+### Ktor HTTP Client with OkHttp Engine
+
+The application uses Ktor's `HttpClient` with the OkHttp engine for general HTTP requests:
+
+```kotlin
+val networkModule = module {
+    single {
+        // Define OkHttpClient
+        OkHttpClient.Builder()
+            .connectTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
+            .readTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
+            .build()
+    }
+
+    single {
+        // Create Ktor client with OkHttp engine
+        HttpClient(OkHttp) {
+            engine {
+                config {
+                    // OkHttp-specific options can be configured here
+                }
+            }
+        }
+    }
+}
+```
+
+### Retrofit with OkHttp
+
+For structured API calls to external services, the application uses Retrofit with OkHttp:
+
+```kotlin
+single {
+    OkHttpClient.Builder()
+        .connectTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
+        .readTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
+        .build()
+}
+
+single {
+    Retrofit.Builder()
+        .baseUrl("https://swapi.dev/api/")
+        .client(get())
+        .addConverterFactory(get<retrofit2.Converter.Factory>())
+        .build()
+}
+```
+
+The Retrofit client is configured with Kotlinx Serialization for JSON parsing, providing type-safe API interactions.
+
+## Pokemon API Integration
+
+This project demonstrates integration with the [Pokemon API (PokeAPI)](https://pokeapi.co/), a free RESTful API providing comprehensive data about the Pokemon universe.
+
+### API Interface
+
+The Pokemon API is accessed through a Retrofit interface:
+
+```kotlin
+interface PokemonApi {
+    @GET("pokemon/") 
+    fun getPokemonList(@Query("offset") offset: Int? = null, @Query("limit") limit: Int? = null): Call<PokemonListResponse>
+
+    @GET("pokemon/{idOrName}/") 
+    fun getPokemon(@Path("idOrName") idOrName: String): Call<Pokemon>
+
+    @GET("pokemon-species/{idOrName}/") 
+    fun getPokemonSpecies(@Path("idOrName") idOrName: String): Call<PokemonSpecies>
+}
+```
+
+### Data Models
+
+The API responses are mapped to Kotlin data classes using Kotlinx Serialization:
+
+```kotlin
+@Serializable
+data class Pokemon(
+    val id: Int,
+    val name: String,
+    val height: Int,
+    val weight: Int,
+    val abilities: List<PokemonAbility>,
+    val types: List<PokemonType>,
+    // Other properties...
+)
+
+@Serializable
+data class PokemonSpecies(
+    val id: Int,
+    val name: String,
+    @SerialName("is_legendary") val isLegendary: Boolean,
+    @SerialName("is_mythical") val isMythical: Boolean,
+    @SerialName("flavor_text_entries") val flavorTextEntries: List<FlavorTextEntry>,
+    // Other properties...
+)
+```
+
+### Exposed Endpoints
+
+The application exposes the Pokemon data through RESTful endpoints:
+
+- `GET /api/pokemon` - Get a paginated list of Pokemon
+- `GET /api/pokemon/{idOrName}` - Get a specific Pokemon by ID or name
+- `GET /api/pokemon-species/{idOrName}` - Get species information for a specific Pokemon by ID or name
+
+These endpoints are documented using OpenAPI annotations and can be explored through the Swagger UI.
+
 ## Dependency Auto-Updates with Renovate
 
 This project uses [Renovate](https://docs.renovatebot.com/) for automated dependency updates. Renovate ensures dependencies stay up-to-date by automatically creating pull requests when new versions are available. The configuration enables auto-merging of approved updates and requires successful build and test checks before merging.

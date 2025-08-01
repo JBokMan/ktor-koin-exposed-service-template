@@ -1,7 +1,6 @@
 package com.example
 
 import com.example.boundary.KafkaController
-import com.example.boundary.StarWarsController
 import com.example.boundary.UserController
 import com.example.config.CohortConfiguration
 import com.example.config.KafkaConfiguration
@@ -48,8 +47,8 @@ fun Application.module() {
     val kafkaController by inject<KafkaController>()
     kafkaController.registerKafkaRoutes(this)
 
-    val starWarsController by inject<StarWarsController>()
-    starWarsController.registerRoutes(this)
+    //    val pokemonController by inject<PokemonController>()
+    //    pokemonController.registerRoutes(this)
 
     // Inject KafkaService to close it when the application is shutting down
     val kafkaService by inject<KafkaService>()
