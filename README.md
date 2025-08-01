@@ -19,6 +19,8 @@ This project is a Kotlin-based web service built using [Ktor](https://ktor.io), 
 | [Exposed](https://github.com/JetBrains/Exposed)                  | SQL database access via Kotlin's Exposed ORM.                        |
 | [PostgreSQL](https://www.postgresql.org/)                        | Uses PostgreSQL as the relational database.                          |
 | [HikariCP](https://github.com/brettwooldridge/HikariCP)          | Connection pooling for efficient database interaction.               |
+| [Retrofit](https://square.github.io/retrofit/)                   | Type-safe HTTP client for API communication.                         |
+| [Okio](https://square.github.io/okio/)                           | Modern I/O library for efficient data processing.                    |
 
 ## Running the Project
 
@@ -216,4 +218,88 @@ Ensure you have SDKMAN installed before using this command.
 ## Dependency Auto-Updates with Renovate
 
 This project uses [Renovate](https://docs.renovatebot.com/) for automated dependency updates. Renovate ensures dependencies stay up-to-date by automatically creating pull requests when new versions are available. The configuration enables auto-merging of approved updates and requires successful build and test checks before merging.
+
+## Using Retrofit and Okio for HTTP Communication
+
+This project uses [Retrofit](https://square.github.io/retrofit/) and [Okio](https://square.github.io/okio/) for efficient HTTP communication with external APIs.
+
+### Retrofit Configuration
+
+Retrofit is a type-safe HTTP client for Android and Java/Kotlin. It's configured in this project as follows:
+
+```kotlin
+val retrofitModule = module {
+    // JSON serialization configuration
+    single<Json> {
+        Json {
+            ignoreUnknownKeys = true
+            coerceInputValues = true
+            isLenient = true
+        }
+    }
+
+    // HTTP client configuration with OkHttp
+    single<OkHttpClient> {
+        OkHttpClient.Builder()
+            .connectTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
+            .readTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
+            .build()
+    }
+
+    // Retrofit instance configuration
+    single<Retrofit> {
+        val okHttpClient = get<OkHttpClient>()
+        val converterFactory = get<Converter.Factory>()
+
+        Retrofit.Builder()
+            .baseUrl("https://pokeapi.co/api/v2/")
+            .client(okHttpClient)
+            .addConverterFactory(converterFactory)
+            .build()
+    }
+}
+```
+
+### Okio Benefits
+
+[Okio](https://square.github.io/okio/) is a modern I/O library that complements OkHttp (used by Retrofit internally). It provides:
+
+- More efficient I/O operations than traditional Java I/O
+- Simplified resource management
+- Better performance for network operations
+- Reduced memory consumption
+
+### Pokemon API Integration
+
+This project integrates with the [PokeAPI](https://pokeapi.co/), a comprehensive Pokemon data API. The integration is implemented using Retrofit:
+
+#### API Interface
+
+```kotlin
+interface PokemonApi {
+    @GET("pokemon/")
+    fun getPokemonList(
+        @Query("offset") offset: Int? = null,
+        @Query("limit") limit: Int? = null,
+    ): Call<PokemonListResponse>
+
+    @GET("pokemon/{idOrName}/") 
+    fun getPokemon(@Path("idOrName") idOrName: String): Call<Pokemon>
+
+    @GET("pokemon-species/{idOrName}/")
+    fun getPokemonSpecies(@Path("idOrName") idOrName: String): Call<PokemonSpecies>
+}
+```
+
+#### Available Endpoints
+
+The Pokemon API integration provides the following endpoints:
+
+| Endpoint                       | Description                                           |
+|-------------------------------|-------------------------------------------------------|
+| `GET /api/pokemon`            | Get a paginated list of Pokemon                       |
+| `GET /api/pokemon/{idOrName}` | Get detailed information about a specific Pokemon     |
+| `GET /api/pokemon-species/{idOrName}` | Get species information about a Pokemon       |
+
+These endpoints serve as a proxy to the PokeAPI, handling error cases and providing a consistent interface for clients.
 

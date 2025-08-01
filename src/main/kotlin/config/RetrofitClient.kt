@@ -6,6 +6,7 @@ import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import org.koin.core.annotation.Single
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Converter
 import retrofit2.Retrofit
@@ -33,7 +34,8 @@ val retrofitModule = module {
             .build()
     }
 
-    single<Retrofit> {
+    // Named Retrofit instance for Pokemon API
+    single<Retrofit>(qualifier = named("pokemonApi")) {
         val okHttpClient = get<OkHttpClient>()
         val converterFactory = get<Converter.Factory>()
 
@@ -44,8 +46,23 @@ val retrofitModule = module {
             .build()
     }
 
+    // Example of another Retrofit client with a different base URL
+    // Uncomment and modify as needed
+    /*
+    single<Retrofit>(qualifier = named("anotherApi")) {
+        val okHttpClient = get<OkHttpClient>()
+        val converterFactory = get<Converter.Factory>()
+
+        Retrofit.Builder()
+            .baseUrl("https://api.example.com/")
+            .client(okHttpClient)
+            .addConverterFactory(converterFactory)
+            .build()
+    }
+    */
+
     single<PokemonApi> {
-        val retrofit = get<Retrofit>()
+        val retrofit = get<Retrofit>(qualifier = named("pokemonApi"))
 
         retrofit.create(PokemonApi::class.java)
     }
