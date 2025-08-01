@@ -13,5 +13,5 @@ fun Application.configureKoin(config: YamlConfig) {
             single<ApplicationConfig> { config }
         } // Creates A Bean of ApplicationConfig
 
-    install(Koin) { modules(ktorModule, defaultModule, networkModule) }
+    install(Koin) { modules(ktorModule, defaultModule, networkModule, retrofitModule) }
 }
