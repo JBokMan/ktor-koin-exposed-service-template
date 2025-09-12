@@ -68,6 +68,7 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.okio)
     implementation(libs.retrofit.kotlinx.serialization)
+    implementation(libs.koog)
     testImplementation(libs.ktor.server.test.host)
     testImplementation(libs.kotlin.test.junit)
     testImplementation(libs.testcontainers.junit.jupiter)

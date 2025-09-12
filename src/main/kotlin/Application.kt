@@ -1,6 +1,7 @@
 package com.example
 
 import boundary.pokemon.PokemonController
+import com.example.boundary.AiController
 import com.example.boundary.KafkaController
 import com.example.boundary.UserController
 import com.example.config.CohortConfiguration
@@ -45,6 +46,9 @@ fun Application.module() {
 
     val pokemonController by inject<PokemonController>()
     pokemonController.registerRoutes(this)
+
+    val aiController by inject<AiController>()
+    aiController.registerAiRoutes(this)
 
     // Inject KafkaService to close it when the application is shutting down
     val kafkaService by inject<KafkaService>()
