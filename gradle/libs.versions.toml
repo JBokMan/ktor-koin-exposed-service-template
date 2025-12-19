@@ -1,5 +1,6 @@
 [versions]
 project-version = "0.0.1"
+jdk-version = "25"
 
 kotlin-version = "2.3.0"
 ktor-version = "3.3.3"

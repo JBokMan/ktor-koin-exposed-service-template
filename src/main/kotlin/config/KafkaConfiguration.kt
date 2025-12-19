@@ -42,10 +42,10 @@ class KafkaConfiguration(
 
             receiver
                 .receive()
-                .map { it.value() }
-                .doOnNext {
-                    log.info { "Received Kafka message: '$it'" }
+                .doOnNext { record ->
+                    log.info { "Received Kafka message: '${record.value()}'" }
                     // Todo call your business logic here
+                    record.receiverOffset().acknowledge()
                 }
                 .subscribe()
         }
