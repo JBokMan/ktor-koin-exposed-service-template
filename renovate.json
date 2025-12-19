@@ -1,8 +1,11 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:recommended",
-    ":automergeAll"
+    "config:recommended"
   ],
-  "commitMessagePrefix": "⬆️ "
+  "commitMessagePrefix": "⬆️ ",
+  "automerge": false,
+  "rebaseWhen": "never",
+  "prConcurrentLimit": 0,
+  "branchConcurrentLimit": 0
 }
