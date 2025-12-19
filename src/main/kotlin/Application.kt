@@ -11,9 +11,11 @@ import com.example.config.configureSwagger
 import com.example.service.KafkaService
 import config.DatabaseConfiguration
 import io.ktor.server.application.Application
+import io.ktor.server.application.ApplicationStopped
 import io.ktor.server.cio.CIO
 import io.ktor.server.config.yaml.YamlConfig
 import io.ktor.server.engine.embeddedServer
+import kotlinx.coroutines.launch
 import org.koin.ktor.ext.inject
 
 fun main() {
@@ -32,10 +34,10 @@ fun Application.module() {
     databaseConfiguration.configureDatabase()
 
     val kafkaConfiguration: KafkaConfiguration by inject()
-    kafkaConfiguration.configureKafka()
+    kafkaConfiguration.configureKafka(this)
 
     val cohortConfiguration: CohortConfiguration by inject()
-    cohortConfiguration.configureCohort(this)
+    launch { cohortConfiguration.configureCohort(this@module) }
 
     val userController by inject<UserController>()
     userController.registerUserRoutes(this)
@@ -46,7 +48,11 @@ fun Application.module() {
     val pokemonController by inject<PokemonController>()
     pokemonController.registerRoutes(this)
 
-    // Inject KafkaService to close it when the application is shutting down
     val kafkaService by inject<KafkaService>()
-    Runtime.getRuntime().addShutdownHook(Thread { kafkaService.close() })
+
+    monitor.subscribe(ApplicationStopped) {
+        kafkaConfiguration.close()
+        kafkaService.close()
+        databaseConfiguration.close()
+    }
 }

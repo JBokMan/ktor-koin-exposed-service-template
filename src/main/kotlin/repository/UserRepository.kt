@@ -4,7 +4,7 @@ import org.koin.core.annotation.Single
 import org.koin.java.KoinJavaComponent.inject
 
 @Single
-class UserRepository() {
+class UserRepository {
     val userService by inject<UserService>(UserService::class.java)
 
     suspend fun createNewUser(exposedUser: ExposedUser): Int {

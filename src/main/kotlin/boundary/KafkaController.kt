@@ -13,7 +13,7 @@ import org.koin.core.annotation.Single
 
 @Single
 class KafkaController(private val kafkaService: KafkaService) {
-    private val log = KotlinLogging.logger { this::class::simpleName }
+    private val log = KotlinLogging.logger {}
 
     fun registerKafkaRoutes(application: Application) {
         application.routing {

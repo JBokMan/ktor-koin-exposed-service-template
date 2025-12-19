@@ -1,13 +1,14 @@
 package com.example.config
 
 import io.github.oshai.kotlinlogging.KotlinLogging
+import io.ktor.server.application.Application
 import io.ktor.server.config.ApplicationConfig
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.common.serialization.StringDeserializer
 import org.koin.core.annotation.Single
+import reactor.core.Disposable
 import reactor.kafka.receiver.KafkaReceiver
 import reactor.kafka.receiver.ReceiverOptions
 
@@ -15,7 +16,7 @@ import reactor.kafka.receiver.ReceiverOptions
 class KafkaConfiguration(
     appConfig: ApplicationConfig // Inject Ktor's configuration
 ) {
-    private val log = KotlinLogging.logger { this::class::simpleName }
+    private val log = KotlinLogging.logger {}
 
     private val topic = appConfig.property("kafka.topic").getString()
     private val bootstrapServers = appConfig.property("kafka.bootstrapServers").getString()
@@ -32,22 +33,29 @@ class KafkaConfiguration(
             ConsumerConfig.ENABLE_METRICS_PUSH_CONFIG to false,
         )
 
-    fun configureKafka() {
-        // Start a coroutine to subscribe to Kafka messages
-        CoroutineScope(Dispatchers.IO).launch {
+    private var subscription: Disposable? = null
+
+    fun configureKafka(application: Application) {
+        // Start a coroutine tied to the Application's lifecycle
+        application.launch(Dispatchers.IO) {
             val receiverOptions =
                 ReceiverOptions.create<String, String>(properties).subscription(setOf(topic))
 
             val receiver = KafkaReceiver.create(receiverOptions)
 
-            receiver
-                .receive()
-                .doOnNext { record ->
-                    log.info { "Received Kafka message: '${record.value()}'" }
-                    // Todo call your business logic here
-                    record.receiverOffset().acknowledge()
-                }
-                .subscribe()
+            subscription =
+                receiver
+                    .receive()
+                    .doOnNext { record ->
+                        log.info { "Received Kafka message: '${record.value()}'" }
+                        // Todo call your business logic here
+                        record.receiverOffset().acknowledge()
+                    }
+                    .subscribe()
         }
+    }
+
+    fun close() {
+        subscription?.dispose()
     }
 }
