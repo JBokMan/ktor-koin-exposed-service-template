@@ -1,6 +1,6 @@
 [versions]
 kotlin-version = "2.2.10"
-ktor-version = "3.3.0"
+ktor-version = "3.3.3"
 koin-version = "4.1.1"
 koin-annotations-version = "2.1.0"
 exposed-version = "0.61.0"
