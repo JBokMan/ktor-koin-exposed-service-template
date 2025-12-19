@@ -1,5 +1,5 @@
 # Build stage: Use Gradle to build the application
-FROM gradle:8.14.2-jdk21 AS build
+FROM gradle:9.0.0-jdk21 AS build
 
 WORKDIR /app
 COPY . .
@@ -11,7 +11,7 @@ RUN rm -rf /home/gradle/.gradle/caches/
 RUN gradle build --no-daemon
 
 # Runtime stage: Use JRE for a smaller image
-FROM eclipse-temurin:21-jre
+FROM eclipse-temurin:25-jre
 
 WORKDIR /app
 # Copy only the built JAR and configuration from the build stage

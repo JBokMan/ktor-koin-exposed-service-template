@@ -1,21 +1,23 @@
 [versions]
-kotlin-version = "2.1.21"
-ktor-version = "3.2.0"
-koin-version = "4.1.0"
+kotlin-version = "2.2.10"
+ktor-version = "3.3.0"
+koin-version = "4.1.1"
 koin-annotations-version = "2.1.0"
 exposed-version = "0.61.0"
-postgresql = "42.7.7"
-hikaricp = "6.3.0"
-kotlin-logging-jvm = "7.0.7"
+postgresql = "42.7.8"
+hikaricp = "7.0.2"
+kotlin-logging-jvm = "7.0.13"
 tabilzad-inspektor = "0.8.2-alpha"
-ksp = "2.1.21-2.0.2"
-cohort = "2.7.2"
+ksp = "2.2.20-2.0.3"
+cohort = "2.8.0"
 cohort-http = "2.4.1"
-ktfmt = "0.22.0"
-kafka = "4.0.0"
-reactor-kafka = "1.3.23"
-testcontainers = "1.21.2"
-
+ktfmt = "0.24.0"
+kafka = "4.1.0"
+reactor-kafka = "1.3.24"
+testcontainers = "1.21.3"
+retrofit = "3.0.0"
+okio = "3.16.0"
+retrofit-kotlinx-serialization = "1.0.0"
 
 
 [libraries]
@@ -46,6 +48,9 @@ ktor-okhttp-jvm = { module = "io.ktor:ktor-client-okhttp-jvm", version.ref = "kt
 kafka-clients = { module = "org.apache.kafka:kafka-clients", version.ref = "kafka" }
 reactor-kafka = { module = "io.projectreactor.kafka:reactor-kafka", version.ref = "reactor-kafka" }
 testcontainers-junit-jupiter = { module = "org.testcontainers:junit-jupiter", version.ref = "testcontainers" }
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+okio = { module = "com.squareup.okio:okio", version.ref = "okio" }
+retrofit-kotlinx-serialization = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version.ref = "retrofit-kotlinx-serialization" }
 
 
 

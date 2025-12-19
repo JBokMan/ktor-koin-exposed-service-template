@@ -4,8 +4,5 @@
     "config:recommended",
     ":automergeAll"
   ],
-  "requiredStatusChecks": [
-    "Build And Test"
-  ],
   "commitMessagePrefix": "⬆️ "
 }
