@@ -27,16 +27,20 @@ import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.ExperimentalTime
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.koin.core.annotation.Single
 import org.koin.java.KoinJavaComponent.inject
 
 @Single
-class CohortConfiguration() {
+class CohortConfiguration {
     val databaseConfiguration by inject<DatabaseConfiguration>(DatabaseConfiguration::class.java)
-    val client: HttpClient by inject<HttpClient>(HttpClient::class.java)
 
     @OptIn(ExperimentalTime::class)
-    fun configureCohort(application: Application) {
+    suspend fun configureCohort(application: Application) {
+        val fileStore =
+            withContext(Dispatchers.IO) {
+                Files.getFileStore(FileSystems.getDefault().getPath("/"))
+            }
 
         val startUpChecks =
             HealthCheckRegistry(Dispatchers.Default) {
@@ -60,7 +64,6 @@ class CohortConfiguration() {
                     initialDelay = 30.seconds,
                     checkInterval = 5.seconds,
                 )
-                val fileStore = Files.getFileStore(FileSystems.getDefault().getPath("/"))
                 register(
                     check = DiskSpaceHealthCheck(fileStore = fileStore),
                     initialDelay = 30.seconds,
@@ -95,11 +98,11 @@ class CohortConfiguration() {
                 register(
                     check =
                         EndpointHealthCheck(
-                            name = "get_user_endpoint",
+                            name = "get_health_endpoint",
 
                             // Function to perform the HTTP request
                             fn = { client: HttpClient ->
-                                client.get("http://localhost:8080/users/1") // Using test user ID 1
+                                client.get("http://localhost:8080/health")
                             },
 
                             // Function to evaluate the response
@@ -122,7 +125,6 @@ class CohortConfiguration() {
         val healthChecks =
             HealthCheckRegistry(Dispatchers.Default) {
                 // These include checks that are useful for continuous health monitoring.
-                val fileStore = Files.getFileStore(FileSystems.getDefault().getPath("/"))
                 register(
                     check = SystemCpuHealthCheck(0.8),
                     initialDelay = 30.seconds,

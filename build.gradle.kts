@@ -17,6 +17,8 @@ application {
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
 }
 
+kotlin { jvmToolchain(libs.versions.jdk.version.get().toInt()) }
+
 ksp { arg("KOIN_DEFAULT_MODULE", "true") }
 
 ktfmt { kotlinLangStyle() }

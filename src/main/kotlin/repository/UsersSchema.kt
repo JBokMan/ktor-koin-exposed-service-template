@@ -15,7 +15,7 @@ import org.koin.core.annotation.Single
 @Serializable data class ExposedUser(val id: Int, val name: String, val age: Int)
 
 @Single
-class UserService() {
+class UserService {
     object Users : Table() {
         val id = integer("id").autoIncrement()
         val name = varchar("name", length = 50)
