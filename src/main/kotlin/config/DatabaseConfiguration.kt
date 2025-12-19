@@ -4,13 +4,12 @@ import com.example.repository.UserService.Users
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import io.github.oshai.kotlinlogging.KotlinLogging
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.Transaction
-import org.jetbrains.exposed.sql.addLogger
-import org.jetbrains.exposed.sql.statements.StatementContext
-import org.jetbrains.exposed.sql.statements.expandArgs
-import org.jetbrains.exposed.sql.transactions.transaction
+import org.jetbrains.exposed.v1.core.Transaction
+import org.jetbrains.exposed.v1.core.statements.StatementContext
+import org.jetbrains.exposed.v1.core.statements.expandArgs
+import org.jetbrains.exposed.v1.jdbc.Database
+import org.jetbrains.exposed.v1.jdbc.SchemaUtils
+import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import org.koin.core.annotation.Single
 
 @Single
@@ -55,7 +54,7 @@ class DatabaseConfiguration {
         log.info { "Database connection pool closed" }
     }
 
-    object KotlinLoggingSqlLogger : org.jetbrains.exposed.sql.SqlLogger {
+    object KotlinLoggingSqlLogger : org.jetbrains.exposed.v1.core.SqlLogger {
         private val kLogger = KotlinLogging.logger {}
 
         override fun log(context: StatementContext, transaction: Transaction) {
