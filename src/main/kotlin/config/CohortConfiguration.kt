@@ -95,11 +95,11 @@ class CohortConfiguration() {
                 register(
                     check =
                         EndpointHealthCheck(
-                            name = "get_user_endpoint",
+                            name = "get_health_endpoint",
 
                             // Function to perform the HTTP request
                             fn = { client: HttpClient ->
-                                client.get("http://localhost:8080/users/1") // Using test user ID 1
+                                client.get("http://localhost:8080/health")
                             },
 
                             // Function to evaluate the response
