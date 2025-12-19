@@ -3,29 +3,12 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.ktor)
     alias(libs.plugins.kotlin.plugin.serialization)
-    alias(libs.plugins.tabilzad.inspektor)
     alias(libs.plugins.ktfmt)
 }
 
 group = "com.example"
 
-version = "0.0.1"
-
-swagger {
-    documentation {
-        generateRequestSchemas = true
-        hideTransientFields = true
-        hidePrivateAndInternalFields = true
-        deriveFieldRequirementFromTypeNullability = true
-        info {
-            title = "Service Name"
-            description = "Service Description"
-            version = "1.0"
-        }
-    }
-
-    pluginOptions { format = "yaml" }
-}
+version = libs.versions.project.version.get()
 
 application {
     mainClass.set("com.example.ApplicationKt")
@@ -42,7 +25,8 @@ repositories { mavenCentral() }
 
 dependencies {
     implementation(libs.ktor.server.core)
-    implementation(libs.ktor.server.swagger)
+    implementation(libs.ktor.openapi)
+    implementation(libs.ktor.swagger.ui)
     implementation(libs.ktor.serialization.kotlinx.json)
     implementation(libs.ktor.server.content.negotiation)
     implementation(libs.exposed.core)
@@ -55,7 +39,6 @@ dependencies {
     implementation(libs.koin.annotations)
     ksp(libs.koin.ksp.compiler)
     implementation(libs.ktor.server.config.yaml)
-    implementation(libs.ktor.server.openapi)
     implementation(libs.kotlin.logging.jvm)
     implementation(libs.cohort.ktor)
     implementation(libs.cohort.logback)
@@ -71,6 +54,8 @@ dependencies {
     testImplementation(libs.ktor.server.test.host)
     testImplementation(libs.kotlin.test.junit)
     testImplementation(libs.testcontainers.junit.jupiter)
+    testImplementation(libs.testcontainers.postgresql)
+    testImplementation(libs.testcontainers.kafka)
 }
 
 tasks.withType<Test> { useJUnitPlatform() }
