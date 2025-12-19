@@ -9,7 +9,7 @@ plugins {
 
 group = "com.example"
 
-version = "0.0.1"
+version = libs.versions.project.version.get()
 
 swagger {
     documentation {
@@ -20,7 +20,7 @@ swagger {
         info {
             title = "Service Name"
             description = "Service Description"
-            version = "1.0"
+            version = libs.versions.swagger.api.version.get()
         }
     }
 

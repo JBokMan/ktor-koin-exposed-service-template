@@ -1,4 +1,7 @@
 [versions]
+project-version = "0.0.1"
+swagger-api-version = "1.0"
+
 kotlin-version = "2.2.21"
 ktor-version = "3.3.3"
 koin-version = "4.2.0-beta2"
