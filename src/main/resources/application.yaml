@@ -3,6 +3,7 @@ ktor:
         modules:
             - com.example.ApplicationKt.module
     deployment:
+        # noinspection KtorYamlConfig
         port: ${PORT:8080}
 
 kafka:
