@@ -9,6 +9,7 @@ jobs:
   update-badges:
     permissions:
       contents: write
+      pull-requests: write
     runs-on: ubuntu-latest
 
     steps:
@@ -37,11 +38,23 @@ jobs:
           sed -i "s|Koin-[0-9.]*-blue|Koin-$KOIN_VERSION-blue|g" README.md
           sed -i "s|Exposed-[0-9.]*-blue|Exposed-$EXPOSED_VERSION-blue|g" README.md
 
-      - name: Change Ownership of all Files to Current User (helps with git push)
-        run: sudo chown -R "${USER:-$(id -un)}" .
-
-      - name: Commit Changes Made by Workflow
-        uses: stefanzweifel/git-auto-commit-action@v7.1.0
+      - name: Create Pull Request
+        id: cpr
+        uses: peter-evans/create-pull-request@v7
         with:
-          commit_message: 🪪 update badges in README.md
-          commit_options: '--no-verify'
+          commit-message: 🪪 update badges in README.md
+          title: 🪪 Update dependency badges in README
+          body: |
+            Automated badge update:
+            - Kotlin: ${{ env.KOTLIN_VERSION }}
+            - Ktor: ${{ env.KTOR_VERSION }}
+            - Koin: ${{ env.KOIN_VERSION }}
+            - Exposed: ${{ env.EXPOSED_VERSION }}
+          branch: chore/update-badges
+          delete-branch: true
+
+      - name: Enable auto-merge
+        if: steps.cpr.outputs.pull-request-number
+        run: gh pr merge --auto --squash "${{ steps.cpr.outputs.pull-request-number }}"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
