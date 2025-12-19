@@ -11,7 +11,10 @@ import com.example.config.configureSwagger
 import com.example.service.KafkaService
 import config.DatabaseConfiguration
 import io.ktor.server.application.Application
-import io.ktor.server.application.ApplicationStopped
+import io.ktor.server.application.ApplicationStopping
+import io.ktor.server.application.createApplicationPlugin
+import io.ktor.server.application.hooks.MonitoringEvent
+import io.ktor.server.application.install
 import io.ktor.server.cio.CIO
 import io.ktor.server.config.yaml.YamlConfig
 import io.ktor.server.engine.embeddedServer
@@ -50,9 +53,13 @@ fun Application.module() {
 
     val kafkaService by inject<KafkaService>()
 
-    monitor.subscribe(ApplicationStopped) {
-        kafkaConfiguration.close()
-        kafkaService.close()
-        databaseConfiguration.close()
-    }
+    install(
+        createApplicationPlugin("ShutdownPlugin") {
+            on(MonitoringEvent(ApplicationStopping)) {
+                kafkaConfiguration.close()
+                kafkaService.close()
+                databaseConfiguration.close()
+            }
+        }
+    )
 }
