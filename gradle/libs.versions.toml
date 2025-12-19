@@ -10,7 +10,7 @@ exposed-version = "0.61.0"
 postgresql = "42.7.8"
 hikaricp = "7.0.2"
 kotlin-logging-jvm = "7.0.13"
-tabilzad-inspektor = "0.9.0-alpha"
+ktor-openapi-tools = "5.4.0"
 ksp = "2.3.4"
 cohort = "2.8.1"
 cohort-http = "2.4.1"
@@ -26,12 +26,10 @@ retrofit-kotlinx-serialization = "1.0.0"
 [libraries]
 kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit5", version.ref = "kotlin-version" }
 ktor-server-core = { module = "io.ktor:ktor-server-core", version.ref = "ktor-version" }
-ktor-server-swagger = { module = "io.ktor:ktor-server-swagger", version.ref = "ktor-version" }
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor-version" }
 ktor-server-content-negotiation = { module = "io.ktor:ktor-server-content-negotiation", version.ref = "ktor-version" }
 ktor-server-config-yaml = { module = "io.ktor:ktor-server-config-yaml", version.ref = "ktor-version" }
 ktor-server-test-host = { module = "io.ktor:ktor-server-test-host", version.ref = "ktor-version" }
-ktor-server-openapi = { module = "io.ktor:ktor-server-openapi", version.ref = "ktor-version" }
 ktor-server-cio = { module = "io.ktor:ktor-server-cio", version.ref = "ktor-version" }
 koin-ktor = { module = "io.insert-koin:koin-ktor", version.ref = "koin-version" }
 exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed-version" }
@@ -56,7 +54,8 @@ testcontainers-kafka = { module = "org.testcontainers:kafka", version.ref = "tes
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 okio = { module = "com.squareup.okio:okio", version.ref = "okio" }
 retrofit-kotlinx-serialization = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version.ref = "retrofit-kotlinx-serialization" }
-
+ktor-openapi = { module = "io.github.smiley4:ktor-openapi", version.ref = "ktor-openapi-tools" }
+ktor-swagger-ui = { module = "io.github.smiley4:ktor-swagger-ui", version.ref = "ktor-openapi-tools" }
 
 
 [plugins]
@@ -64,6 +63,5 @@ kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin-version" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 kotlin-plugin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin-version" }
 ktor = { id = "io.ktor.plugin", version.ref = "ktor-version" }
-tabilzad-inspektor = { id = "io.github.tabilzad.inspektor", version.ref = "tabilzad-inspektor" }
 ktfmt = { id = "com.ncorti.ktfmt.gradle", version.ref = "ktfmt" }
 
