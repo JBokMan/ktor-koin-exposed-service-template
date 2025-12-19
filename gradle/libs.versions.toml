@@ -16,7 +16,7 @@ kafka = "4.1.0"
 reactor-kafka = "1.3.24"
 testcontainers = "1.21.3"
 retrofit = "3.0.0"
-okio = "3.16.0"
+okio = "3.16.4"
 retrofit-kotlinx-serialization = "1.0.0"
 
 
