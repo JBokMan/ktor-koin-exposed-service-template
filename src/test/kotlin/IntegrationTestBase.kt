@@ -51,7 +51,6 @@ abstract class IntegrationTestBase {
                     Wait.forListeningPort(),
                 )
                 .withExposedService(KAFKA_SERVICE_NAME, KAFKA_SERVICE_PORT, Wait.forListeningPort())
-                .withLocalCompose(true)
 
         composeContainer.start()
     }
