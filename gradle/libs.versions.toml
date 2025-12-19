@@ -1,5 +1,5 @@
 [versions]
-kotlin-version = "2.2.21"
+kotlin-version = "2.3.0"
 ktor-version = "3.3.3"
 koin-version = "4.2.0-beta2"
 koin-annotations-version = "2.3.2-Beta1"
