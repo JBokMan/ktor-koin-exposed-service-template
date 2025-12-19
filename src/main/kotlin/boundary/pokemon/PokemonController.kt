@@ -12,7 +12,7 @@ import retrofit2.await
 
 @Single
 class PokemonController(private val pokemonClient: PokemonClient) {
-    private val log = KotlinLogging.logger { this::class::simpleName }
+    private val log = KotlinLogging.logger {}
 
     fun registerRoutes(app: Application) {
         app.routing {

@@ -12,7 +12,7 @@ import org.koin.core.annotation.Single
 
 @Single
 class KafkaService(appConfig: ApplicationConfig) {
-    private val log = KotlinLogging.logger { this::class::simpleName }
+    private val log = KotlinLogging.logger {}
 
     private val topic = appConfig.property("kafka.topic").getString()
     private val bootstrapServers = appConfig.property("kafka.bootstrapServers").getString()

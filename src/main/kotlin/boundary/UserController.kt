@@ -17,7 +17,7 @@ import org.koin.core.annotation.Single
 @Single
 class UserController(private val userRepository: UserRepository) {
 
-    private val log = KotlinLogging.logger { this::class::simpleName }
+    private val log = KotlinLogging.logger {}
 
     fun registerUserRoutes(application: Application) {
         application.routing {

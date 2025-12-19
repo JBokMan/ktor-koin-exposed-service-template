@@ -14,8 +14,8 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.koin.core.annotation.Single
 
 @Single
-class DatabaseConfiguration() {
-    private val log = KotlinLogging.logger { this::class::simpleName }
+class DatabaseConfiguration {
+    private val log = KotlinLogging.logger {}
 
     val dataSource =
         HikariDataSource(
@@ -50,8 +50,13 @@ class DatabaseConfiguration() {
         log.info { "Database initialized successfully" }
     }
 
+    fun close() {
+        dataSource.close()
+        log.info { "Database connection pool closed" }
+    }
+
     object KotlinLoggingSqlLogger : org.jetbrains.exposed.sql.SqlLogger {
-        private val kLogger = KotlinLogging.logger { this::class::simpleName }
+        private val kLogger = KotlinLogging.logger {}
 
         override fun log(context: StatementContext, transaction: Transaction) {
             kLogger.debug { "SQL: ${context.expandArgs(transaction)}" }
