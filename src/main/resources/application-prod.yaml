@@ -1,0 +1,28 @@
+# Production environment configuration
+# Usage: Set environment variable KTOR_ENV=prod or pass -Dktor.env=prod
+
+ktor:
+    deployment:
+        port: ${PORT:8080}
+
+database:
+    host: ${POSTGRES_HOST}
+    port: ${POSTGRES_PORT:5432}
+    name: ${POSTGRES_DB}
+    user: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+    poolSize: ${DB_POOL_SIZE:20}
+
+kafka:
+    bootstrapServers: ${KAFKA_BOOTSTRAP_SERVERS}
+    topic: ${KAFKA_TOPIC}
+    groupId: ${KAFKA_GROUP_ID}
+    acksConfig: all
+
+security:
+    hsts:
+        enabled: true
+
+logging:
+    format: json
+    level: ${LOG_LEVEL:INFO}

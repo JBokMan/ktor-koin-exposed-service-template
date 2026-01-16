@@ -6,6 +6,8 @@ import com.example.boundary.UserController
 import com.example.config.CohortConfiguration
 import com.example.config.KafkaConfiguration
 import com.example.config.configureKoin
+import com.example.config.configureRequestLogging
+import com.example.config.configureSecurityHeaders
 import com.example.config.configureSerialization
 import com.example.config.configureSwagger
 import com.example.service.KafkaService
@@ -30,6 +32,8 @@ fun Application.module() {
     val config = YamlConfig("application.yaml") ?: error("Failed to load configuration")
 
     configureKoin(config)
+    configureSecurityHeaders()
+    configureRequestLogging()
     configureSerialization()
     configureSwagger()
 

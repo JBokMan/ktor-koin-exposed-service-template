@@ -18,7 +18,7 @@ class PokemonApiIntegrationTest : IntegrationTestBase() {
     @Test
     fun testGetPokemonList() = withTestApp {
         // Act
-        val response = client.get("/api/pokemon")
+        val response = client.get("/api/v1/pokemon")
 
         // Assert
         assertEquals(HttpStatusCode.OK, response.status)
@@ -34,7 +34,7 @@ class PokemonApiIntegrationTest : IntegrationTestBase() {
     @Test
     fun testGetPokemonListWithPagination() = withTestApp {
         // Act
-        val response = client.get("/api/pokemon?offset=20&limit=10")
+        val response = client.get("/api/v1/pokemon?offset=20&limit=10")
 
         // Assert
         assertEquals(HttpStatusCode.OK, response.status)
@@ -51,7 +51,7 @@ class PokemonApiIntegrationTest : IntegrationTestBase() {
     @Test
     fun testGetPokemonById() = withTestApp {
         // Act
-        val response = client.get("/api/pokemon/1")
+        val response = client.get("/api/v1/pokemon/1")
 
         // Assert
         assertEquals(HttpStatusCode.OK, response.status)
@@ -68,7 +68,7 @@ class PokemonApiIntegrationTest : IntegrationTestBase() {
     @Test
     fun testGetPokemonByName() = withTestApp {
         // Act
-        val response = client.get("/api/pokemon/pikachu")
+        val response = client.get("/api/v1/pokemon/pikachu")
 
         // Assert
         assertEquals(HttpStatusCode.OK, response.status)
@@ -85,7 +85,7 @@ class PokemonApiIntegrationTest : IntegrationTestBase() {
     @Test
     fun testGetPokemonWithInvalidIdOrName() = withTestApp {
         // Act
-        val response = client.get("/api/pokemon/invalid-pokemon-name")
+        val response = client.get("/api/v1/pokemon/invalid-pokemon-name")
 
         // Assert
         assertEquals(HttpStatusCode.InternalServerError, response.status)
@@ -94,7 +94,7 @@ class PokemonApiIntegrationTest : IntegrationTestBase() {
     @Test
     fun testGetPokemonSpeciesById() = withTestApp {
         // Act
-        val response = client.get("/api/pokemon-species/1")
+        val response = client.get("/api/v1/pokemon-species/1")
 
         // Assert
         assertEquals(HttpStatusCode.OK, response.status)
@@ -111,7 +111,7 @@ class PokemonApiIntegrationTest : IntegrationTestBase() {
     @Test
     fun testGetPokemonSpeciesByName() = withTestApp {
         // Act
-        val response = client.get("/api/pokemon-species/pikachu")
+        val response = client.get("/api/v1/pokemon-species/pikachu")
 
         // Assert
         assertEquals(HttpStatusCode.OK, response.status)
@@ -128,7 +128,7 @@ class PokemonApiIntegrationTest : IntegrationTestBase() {
     @Test
     fun testGetPokemonSpeciesWithInvalidIdOrName() = withTestApp {
         // Act
-        val response = client.get("/api/pokemon-species/invalid-pokemon-name")
+        val response = client.get("/api/v1/pokemon-species/invalid-pokemon-name")
 
         // Assert
         assertEquals(HttpStatusCode.InternalServerError, response.status)

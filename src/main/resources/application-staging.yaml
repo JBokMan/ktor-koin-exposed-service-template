@@ -1,0 +1,27 @@
+# Staging environment configuration
+# Usage: Set environment variable KTOR_ENV=staging or pass -Dktor.env=staging
+
+ktor:
+    deployment:
+        port: ${PORT:8080}
+
+database:
+    host: ${POSTGRES_HOST}
+    port: ${POSTGRES_PORT:5432}
+    name: ${POSTGRES_DB}
+    user: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+    poolSize: 10
+
+kafka:
+    bootstrapServers: ${KAFKA_BOOTSTRAP_SERVERS}
+    topic: ${KAFKA_TOPIC}
+    groupId: ${KAFKA_GROUP_ID}
+
+security:
+    hsts:
+        enabled: true
+
+logging:
+    format: json
+    level: INFO

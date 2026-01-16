@@ -1,18 +1,50 @@
 <configuration>
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <!-- Property to switch between JSON and console logging -->
+    <property name="LOG_FORMAT" value="${LOG_FORMAT:-console}" />
+
+    <!-- Console appender with colored output (for development) -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>
-                %cyan(%d{HH:mm:ss.SSS}) %boldYellow([%thread]) %blue(%X) %highlight([%level]) %magenta(%logger) - %msg%n
-            </pattern>
+            <pattern>%cyan(%d{HH:mm:ss.SSS}) %boldYellow([%thread]) %blue([%X{correlationId}]) %highlight([%level]) %magenta(%logger{36}) - %msg%n</pattern>
         </encoder>
     </appender>
 
+    <!-- JSON appender for structured logging (for production) -->
+    <appender name="JSON" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <includeMdcKeyName>correlationId</includeMdcKeyName>
+            <includeMdcKeyName>userId</includeMdcKeyName>
+            <includeMdcKeyName>requestPath</includeMdcKeyName>
+            <includeMdcKeyName>requestMethod</includeMdcKeyName>
+            <fieldNames>
+                <timestamp>@timestamp</timestamp>
+                <message>message</message>
+                <logger>logger</logger>
+                <thread>thread</thread>
+                <level>level</level>
+                <stackTrace>stackTrace</stackTrace>
+            </fieldNames>
+            <customFields>{"service":"ktor-service-template","version":"1.0.0"}</customFields>
+        </encoder>
+    </appender>
+
+    <!-- Suppress noisy loggers -->
     <logger name="org.apache.kafka.clients.consumer.internals.ConsumerCoordinator" level="WARN" />
     <logger name="org.apache.kafka.common.config.AbstractConfig" level="WARN"/>
-
-    <root level="INFO">
-        <appender-ref ref="STDOUT"/>
-    </root>
-
+    <logger name="org.apache.kafka.clients.admin.AdminClientConfig" level="WARN"/>
+    <logger name="org.apache.kafka.clients.producer.ProducerConfig" level="WARN"/>
+    <logger name="org.apache.kafka.clients.consumer.ConsumerConfig" level="WARN"/>
     <logger name="io.ktor.server.cio" level="INFO"/>
+
+    <!-- Root logger configuration -->
+    <root level="INFO">
+        <if condition='property("LOG_FORMAT").equals("json")'>
+            <then>
+                <appender-ref ref="JSON"/>
+            </then>
+            <else>
+                <appender-ref ref="CONSOLE"/>
+            </else>
+        </if>
+    </root>
 </configuration>

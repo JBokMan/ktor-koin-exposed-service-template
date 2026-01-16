@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp@latest"]
+    },
+    "postgres": {
+      "command": "docker",
+      "args": [
+        "run", "-i", "--rm", "--network=host",
+        "-e", "DATABASE_URI=postgresql://myuser:mypassword@localhost:5432/mydatabase",
+        "crystaldba/postgres-mcp",
+        "--access-mode=restricted"
+      ]
+    }
+  }
+}
