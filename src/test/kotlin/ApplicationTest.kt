@@ -20,7 +20,7 @@ class ApplicationTest : IntegrationTestBase() {
     @Test
     fun testGetEmptyUsers() = withTestApp {
         // Act
-        val response = client.get("/users")
+        val response = client.get("/api/v1/users")
 
         // Assert
         assertEquals(HttpStatusCode.OK, response.status)
