@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.ktor)
     alias(libs.plugins.kotlin.plugin.serialization)
     alias(libs.plugins.ktfmt)
+    jacoco
 }
 
 group = "com.example"
@@ -37,6 +38,10 @@ dependencies {
     implementation(libs.postgresql)
     implementation(libs.hikaricp)
     implementation(libs.ktor.server.cio)
+    implementation(libs.ktor.server.default.headers)
+    implementation(libs.ktor.server.call.logging)
+    implementation(libs.logstash.logback.encoder)
+    implementation(libs.janino)
     implementation(libs.koin.ktor)
     implementation(libs.koin.annotations)
     ksp(libs.koin.ksp.compiler)
@@ -60,7 +65,30 @@ dependencies {
     testImplementation(libs.testcontainers.kafka)
 }
 
-tasks.withType<Test> { useJUnitPlatform() }
+tasks.withType<Test> {
+    useJUnitPlatform()
+    finalizedBy(tasks.jacocoTestReport)
+}
+
+jacoco { toolVersion = "0.8.12" }
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.test)
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+        csv.required.set(false)
+    }
+    classDirectories.setFrom(
+        files(
+            classDirectories.files.map { fileTree(it) { exclude("**/generated/**", "**/ksp/**") } }
+        )
+    )
+}
+
+tasks.jacocoTestCoverageVerification {
+    violationRules { rule { limit { minimum = "0.50".toBigDecimal() } } }
+}
 
 val installLocalPostCommitGitHook =
     tasks.register<Copy>("installLocalPreCommitGitHook") {
