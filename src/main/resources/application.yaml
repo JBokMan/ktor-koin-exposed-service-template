@@ -3,12 +3,31 @@ ktor:
         modules:
             - com.example.ApplicationKt.module
     deployment:
-        # noinspection KtorYamlConfig
         port: ${PORT:8080}
 
+# Database configuration
+database:
+    host: ${POSTGRES_HOST:localhost}
+    port: ${POSTGRES_PORT:5432}
+    name: ${POSTGRES_DB:mydatabase}
+    user: ${POSTGRES_USER:myuser}
+    password: ${POSTGRES_PASSWORD:mypassword}
+    poolSize: ${DB_POOL_SIZE:10}
+
+# Kafka configuration
 kafka:
     topic: ${KAFKA_TOPIC:my-topic}
     bootstrapServers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
     groupId: ${KAFKA_GROUP_ID:ktor-kafka-group}
     autoOffsetReset: ${KAFKA_AUTO_OFFSET_RESET:earliest}
     acksConfig: ${KAFKA_ACKS_CONFIG:all}
+
+# Security configuration
+security:
+    hsts:
+        enabled: ${ENABLE_HSTS:false}
+
+# Logging configuration
+logging:
+    format: ${LOG_FORMAT:console}
+    level: ${LOG_LEVEL:INFO}

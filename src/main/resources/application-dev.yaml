@@ -1,0 +1,27 @@
+# Development environment configuration
+# Usage: Set environment variable KTOR_ENV=dev or pass -Dktor.env=dev
+
+ktor:
+    deployment:
+        port: 8080
+
+database:
+    host: localhost
+    port: 5432
+    name: mydatabase
+    user: myuser
+    password: mypassword
+    poolSize: 5
+
+kafka:
+    bootstrapServers: localhost:9092
+    topic: my-topic
+    groupId: ktor-kafka-group-dev
+
+security:
+    hsts:
+        enabled: false
+
+logging:
+    format: console
+    level: DEBUG
