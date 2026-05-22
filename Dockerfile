@@ -1,21 +1,30 @@
-# Build stage: Use Gradle to build the application
-FROM gradle:9.2.1-jdk25 AS build
+# Build stage: Use the Kotlin Toolchain CLI to build the application
+FROM eclipse-temurin:25-jdk AS build
 
 WORKDIR /app
+
+# Install curl so we can pull the Kotlin CLI installer
+RUN apt-get update && apt-get install -y --no-install-recommends curl ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install the Kotlin Toolchain CLI without touching the shell profile
+ENV KOTLIN_CLI_NO_MODIFY_PATH=1
+RUN curl -fsSL https://kotl.in/install.sh | sh
+ENV PATH="/root/.local/bin:${PATH}"
+
 COPY . .
 
-# Add this line to clear the cache before building
-RUN rm -rf /home/gradle/.gradle/caches/
+# Produce the Spring-Boot-loader style executable JAR (replacement for ./gradlew buildFatJar)
+RUN kotlin package
 
-# Your original build command
-RUN gradle build --no-daemon
+# Copy the produced artifact to a stable, predictable path
+RUN cp build/tasks/_*_executableJarJvm/*-executable.jar /tmp/app.jar
 
 # Runtime stage: Use JRE for a smaller image
 FROM eclipse-temurin:25.0.1_8-jre
 
 WORKDIR /app
-# Copy only the built JAR and configuration from the build stage
-COPY --from=build /app/build/libs/*.jar app.jar
+COPY --from=build /tmp/app.jar app.jar
 COPY --from=build /app/src/main/resources/application.yaml /app/application.yaml
 
 # Environment variables that can be overridden
