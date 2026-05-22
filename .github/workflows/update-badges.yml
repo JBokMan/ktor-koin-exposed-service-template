@@ -21,10 +21,10 @@ jobs:
       - name: Extract Dependency Versions
         id: extract_versions
         run: |
-          KOTLIN_VERSION=$(grep 'kotlin-version = ' gradle/libs.versions.toml | cut -d'"' -f2)
-          KTOR_VERSION=$(grep 'ktor-version = ' gradle/libs.versions.toml | cut -d'"' -f2)
-          KOIN_VERSION=$(grep 'koin-version = ' gradle/libs.versions.toml | cut -d'"' -f2)
-          EXPOSED_VERSION=$(grep 'exposed-version = ' gradle/libs.versions.toml | cut -d'"' -f2)
+          KOTLIN_VERSION=$(grep 'kotlin-version = ' libs.versions.toml | cut -d'"' -f2)
+          KTOR_VERSION=$(grep 'ktor-version = ' libs.versions.toml | cut -d'"' -f2)
+          KOIN_VERSION=$(grep 'koin-version = ' libs.versions.toml | cut -d'"' -f2)
+          EXPOSED_VERSION=$(grep 'exposed-version = ' libs.versions.toml | cut -d'"' -f2)
 
           echo "KOTLIN_VERSION=$KOTLIN_VERSION" >> $GITHUB_ENV
           echo "KTOR_VERSION=$KTOR_VERSION" >> $GITHUB_ENV

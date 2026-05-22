@@ -22,13 +22,22 @@ jobs:
         with:
           java-version: '25'
           distribution: 'temurin'
-          cache: gradle
 
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v5.0.0
+      - name: Install Kotlin Toolchain CLI
+        run: |
+          KOTLIN_CLI_NO_MODIFY_PATH=1 curl -fsSL https://kotl.in/install.sh | sh
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
 
-      - name: Build and Test with Gradle
-        run: ./gradlew build --no-daemon
+      - name: Cache Kotlin Toolchain
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/JetBrains/Kotlin
+          key: kotlin-toolchain-${{ runner.os }}-${{ hashFiles('module.yaml', 'libs.versions.toml') }}
+          restore-keys: |
+            kotlin-toolchain-${{ runner.os }}-
+
+      - name: Build and Test
+        run: kotlin test
 
       - name: Show Docker status on failure
         if: failure()
