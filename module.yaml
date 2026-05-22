@@ -1,0 +1,61 @@
+product: jvm/app
+
+# Keep the existing src/main/kotlin, src/main/resources, src/test/kotlin layout.
+layout: maven-like
+
+settings:
+  jvm:
+    release: 25
+    mainClass: com.example.ApplicationKt
+    jdk:
+      version: 25
+  ktor:
+    enabled: true
+    version: 3.3.3
+    applyBom: false
+  kotlin:
+    serialization: json
+    ksp:
+      processors:
+        - $libs.koin.ksp.compiler
+      processorOptions:
+        KOIN_DEFAULT_MODULE: "true"
+
+dependencies:
+  - $libs.ktor.server.core
+  - $libs.ktor.server.cio
+  - $libs.ktor.server.content.negotiation
+  - $libs.ktor.server.config.yaml
+  - $libs.ktor.server.default.headers
+  - $libs.ktor.server.call.logging
+  - $libs.ktor.serialization.kotlinx.json
+  - $libs.ktor.openapi
+  - $libs.ktor.swagger.ui
+  - $libs.ktor.okhttp
+  - $libs.ktor.okhttp.jvm
+  - $libs.koin.ktor
+  - $libs.koin.annotations
+  - $libs.exposed.core
+  - $libs.exposed.dao
+  - $libs.exposed.jdbc
+  - $libs.postgresql
+  - $libs.hikaricp
+  - $libs.kotlin.logging.jvm
+  - $libs.logstash.logback.encoder
+  - $libs.janino
+  - $libs.cohort.ktor
+  - $libs.cohort.logback
+  - $libs.cohort.hikari
+  - $libs.cohort.http
+  - $libs.kafka.clients
+  - $libs.reactor.kafka
+  - $libs.retrofit
+  - $libs.okio
+  - $libs.retrofit.kotlinx.serialization
+
+test-dependencies:
+  - $libs.ktor.server.test.host
+  - $libs.kotlin.test.junit
+  - $libs.testcontainers.junit.jupiter
+  - $libs.testcontainers.postgresql
+  - $libs.testcontainers.kafka
