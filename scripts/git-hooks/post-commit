@@ -16,16 +16,18 @@ if [[ "$BRANCH_NAME" == *"no branch, rebasing"* ]]; then
   exit 0
 fi
 
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+
 printf "Stashing uncommitted changes with message \"post_commit_stash\"...\n\n"
 git stash -q -m "post_commit_stash" --keep-index --include-untracked
 
-printf "🚀 Running KtfmtFormat...\n\n"
-./gradlew -Dorg.gradle.jvmargs=-Xmx4g ktfmtFormat
+printf "🚀 Running ktfmt...\n\n"
+"$REPO_ROOT/scripts/ktfmt"
 
 FORMAT_RESULT=$?
 
 if ! git diff --quiet; then
-  echo "KtfmtFormat made changes"
+  echo "ktfmt made changes"
   printf "Amending changes to the current commit...\n\n"
   git add .
   git commit --amend --no-edit --no-verify
@@ -41,7 +43,7 @@ if [ $STASH_RESULT -eq 0 ]; then
 fi
 
 if [ $FORMAT_RESULT -ne 0 ]; then
-  printf "\n⛔️ Ktfmt Format failed. Please fix the code format issues."
+  printf "\n⛔️ ktfmt failed. Please fix the code format issues."
   exit 1
 fi
 

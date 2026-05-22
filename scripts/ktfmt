@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+# Format the project's Kotlin sources with ktfmt (Meta's CLI), caching the jar locally.
+#
+# Replaces `./gradlew ktfmtFormat` after the migration from Gradle to the Kotlin Toolchain.
+#
+# Usage:
+#   scripts/ktfmt                       # format src/main, src/test in place
+#   scripts/ktfmt --dry-run             # report files that would change without writing
+#   scripts/ktfmt [flags] path [path..] # explicit paths override the auto-discovered defaults
+
+set -euo pipefail
+
+KTFMT_VERSION="${KTFMT_VERSION:-0.62}"
+CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/ktfmt"
+JAR="${CACHE_DIR}/ktfmt-${KTFMT_VERSION}-with-dependencies.jar"
+URL="https://repo1.maven.org/maven2/com/facebook/ktfmt/${KTFMT_VERSION}/ktfmt-${KTFMT_VERSION}-with-dependencies.jar"
+
+if [ ! -f "$JAR" ]; then
+  echo "Downloading ktfmt ${KTFMT_VERSION}..." >&2
+  mkdir -p "$CACHE_DIR"
+  tmp="$(mktemp "${JAR}.XXXXXX")"
+  trap 'rm -f "$tmp"' EXIT
+  curl --fail --silent --show-error --location --retry 3 --output "$tmp" "$URL"
+  mv "$tmp" "$JAR"
+  trap - EXIT
+fi
+
+flags=()
+paths=()
+for arg in "$@"; do
+  case "$arg" in
+    -*) flags+=("$arg") ;;
+    *)  paths+=("$arg") ;;
+  esac
+done
+
+if [ "${#paths[@]}" -eq 0 ]; then
+  while IFS= read -r line; do
+    paths+=("$line")
+  done < <(find src/main src/test -type f \( -name '*.kt' -o -name '*.kts' \) 2>/dev/null)
+fi
+
+if [ "${#paths[@]}" -eq 0 ]; then
+  echo "ktfmt: no Kotlin files to format" >&2
+  exit 0
+fi
+
+exec java -jar "$JAR" --kotlinlang-style ${flags[@]+"${flags[@]}"} "${paths[@]}"
